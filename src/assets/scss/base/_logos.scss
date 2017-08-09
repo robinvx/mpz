@@ -1,0 +1,16 @@
+.logo {
+    display: inline-block;
+    width: 100%;
+
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: contain;
+    
+    
+    // Logo images / sizes
+    &--mobile { 
+        width: rem(155);
+        height: rem(35);
+        background-image: url('./assets/img/logo-mobile.svg'); 
+    }
+}

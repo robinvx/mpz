@@ -1,0 +1,26 @@
+// COLORS
+$color-mineshaft: #212121;
+$color-alabaster: #fafafa;
+
+$color-claret: #801735;
+$color-nevada: #5e6a70;
+
+$color-succes: #26a69a;
+$color-error: #f44336;
+
+// SHADOWS
+$shadow-light: 0 1px 10px rgba(0,0,0, 0.06);
+$shadow-medium: 0 1px 10px rgba(0,0,0, 0.1);
+$shadow-button: 0 2px 2px 0 rgba(0,0,0, 0.15); 
+$shadow-card: 0 2px 2px 0 rgba(0,0,0,0.14), 
+              0 1px 5px 0 rgba(0,0,0,0.12), 
+              0 3px 1px -2px rgba(0,0,0,0.2); 
+
+// SPACINGS
+$padding-base: rem(30);
+$padding-base-half: calc(#{$padding-base} / 2);
+$padding-base-double: calc(#{$padding-base} * 2);
+
+// ANIMATIONS
+$animation-speed-card: 0.22s;
+$animation-delay-card: 0.02s;
