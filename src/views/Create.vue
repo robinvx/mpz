@@ -169,17 +169,17 @@
             <h5 style="margin-top: 20px">Ruwvoeder</h5>
             <div>
                 <div>
-                    <input type="radio" id="food_food_a_food_a1" value="24/7" v-model="food.food_a">
+                    <input type="radio" id="food_food_a_food_a1" name="foodOptions" value="24/7" v-model="food.food_a">
                     <label for="food_food_a_food_a1">24/7</label>
                 </div>
                 <div>
-                    <input type="radio" id="food_food_a_food_a2" value="x/dag" v-model="food.food_a">
+                    <input type="radio" id="food_food_a_food_a2" name="foodOptions" :value="food.food_a">
                     <label for="food_food_a_food_a2">
-                        <input type="number" v-model="food.food_a">/dag
+                        <input type="number" min="1" value="1" @input="food.food_a = $event.target.value" v-on:click="setChecked" v-on:keyup="checkNumber">/dag
                     </label>
                 </div>
                 <div>
-                    <input type="radio" id="food_food_a_food_a3" value="Verantwoordelijkheid van de klant" v-model="food.food_a">
+                    <input type="radio" id="food_food_a_food_a3" name="foodOptions" value="Verantwoordelijkheid van de klant" v-model="food.food_a">
                     <label for="food_food_a_food_a3">Verantwoordelijkheid van de klant</label>
                 </div>
             </div>
@@ -198,12 +198,14 @@
             <div>
                 <h5 style="margin-top: 20px;">Mest de klant zelf uit?</h5>
                 <div>
-                    <input type="radio" id="stable_cleaning_cleaning_a" value="Nee" v-model="stable.cleaning">
+                    <input type="radio" id="stable_cleaning_cleaning_a" name="cleaningOptions" value="Nee" v-model="stable.cleaning">
                     <label for="stable_cleaning_cleaning_a">Nee</label>
                 </div>
                 <div>
-                    <input type="radio" id="stable_cleaning_cleaning_b" value="x/week" v-model="stable.cleaning">
-                    <label for="stable_cleaning_cleaning_b">x/week</label>
+                    <input type="radio" id="stable_cleaning_cleaning_b" name="cleaningOptions" :value="stable.cleaning">
+                    <label for="stable_cleaning_cleaning_b">
+                        <input type="number" min="1" value="1" @input="stable.cleaning = $event.target.value" v-on:click="setChecked" v-on:keyup="checkNumber">/week
+                    </label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Stalbedekking</h5>
@@ -272,6 +274,9 @@
             </div>
             <h4 style="margin: 20px 0 10px 0">YOUTUBE</h4>
             <h4 style="margin: 20px 0 10px 0">FOTO'S</h4>
+            <progress id="upload-progress" value="0" max="100">0%</progress>
+            <input id="upload-choose" type="file" value="upload" v-on:change="getImage">
+            <button id="upload-submit" style="margin-bottom:50px;" v-on:click.prevent="uploadImage">Upload</button>
             
             <div>
                 <input type="submit" value="Plaatsen" v-on:click.prevent="createListing">
@@ -323,7 +328,9 @@
                     cafetaria: []
                 },
                 extra_info: '',
-                availability: ''
+                availability: '',
+                uploadedImages: [],
+                listingPostKey: ''
             }
         },
         computed: {
@@ -338,10 +345,13 @@
 
                 if (this.isFormValid()) {
                     const user = firebase.auth().currentUser
-                    const listingRef = firebase.database().ref('listings/')
+                    const listingPostKey = firebase.database().ref('listings/').push().key
+                    const listingRef = firebase.database().ref('listings/' + listingPostKey)
+                    
+                    this.listingPostKey = listingPostKey
 
                     let newListingData = {
-                        user: user.uid,
+                        userid: user.uid,
                         name: this.name,
                         address: this.address,
                         postalcode: this.postalcode,
@@ -372,8 +382,9 @@
                         availability: this.availability
                     }
 
-                    return listingRef.push(newListingData).then(() => {
+                    return listingRef.update(newListingData).then(() => {
                         console.log("listing posted")
+                        this.renameAndUploadImages()
                     }, error => {
                         console.log(error.message)
                         this.errors.push(error.message)
@@ -389,7 +400,8 @@
                     this.type.length == 0 ||
                     this.food.food_a.length == 0 ||
                     this.food.food_b.length == 0 ||
-                    this.stable.cleaning.length == 0
+                    this.stable.cleaning.length == 0 ||
+                    this.uploadedImages.length == 0
                 ) {
                     return true
                 }
@@ -401,7 +413,56 @@
                     return false
                 }
                 return true
+            },
+            setChecked(event) {
+                let radioBtn = event.currentTarget.parentElement.previousElementSibling
+                radioBtn.checked = true
+            },
+            checkNumber(event) {
+                let inputValue = event.currentTarget
+                if (inputValue.value < 1) {
+                    inputValue.value = 1
+                }
+            },
+            getImage() {
+                const user = firebase.auth().currentUser 
+                
+                // Get image and push it in array
+                let image = event.currentTarget.files[0]
+                this.uploadedImages.push(image)
+            },
+            renameAndUploadImages() {
+                const user = firebase.auth().currentUser
+                
+                for (let i = 0; i < this.uploadedImages.length; i++) {
+                    
+                    // Rename image
+                    let imageName = this.uploadedImages[i].name
+                    let imageExtension = imageName.split('.').pop()
+                    let newImageName = this.listingPostKey + i + '.' +imageExtension
+                    imageName = newImageName
+                   
+                    // Create storageRef for each image
+                    let storageRef = firebase.storage().ref('images/' + user.uid + '/' + imageName)
+                    
+                    // Upload images
+                    storageRef.put(this.uploadedImages[i]).then(() => {
+                        console.log(imageName + " has been uploaded")
+                    }, error => {
+                        console.log(error.message)
+                        this.errors.push(error.message)
+                    })
+                } 
             }
+//            uploadImage() {
+//                let uploadProgress = document.getElementById("upload-progress")
+//                let uploadChoose = document.getElementById("upload-choose")
+//                let uploadSubmit = document.getElementById("upload-submit")
+//                
+//                console.log(uploadProgress)
+//                console.log(uploadChoose)
+//                console.log(uploadSubmit)
+//            }
         }
     }
 
