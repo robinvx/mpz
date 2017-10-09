@@ -274,9 +274,14 @@
             </div>
             <h4 style="margin: 20px 0 10px 0">YOUTUBE</h4>
             <h4 style="margin: 20px 0 10px 0">FOTO'S</h4>
+            <div>
+                <div v-for="(imageUrl, index) in imageUrls">
+                    <img :src="imageUrl" height="100"> <span v-on:click="removeImage">DELETE</span>
+                </div>
+            </div>
             <progress id="upload-progress" value="0" max="100">0%</progress>
-            <input id="upload-choose" type="file" value="upload" v-on:change="getImage">
-            <button id="upload-submit" style="margin-bottom:50px;" v-on:click.prevent="uploadImage">Upload</button>
+            <input id="upload-choose" type="file" value="upload" v-on:change="getImage" multiple>
+            
             
             <div>
                 <input type="submit" value="Plaatsen" v-on:click.prevent="createListing">
@@ -330,7 +335,8 @@
                 extra_info: '',
                 availability: '',
                 uploadedImages: [],
-                listingPostKey: ''
+                listingPostKey: '',
+                imageUrls: []
             }
         },
         computed: {
@@ -425,11 +431,25 @@
                 }
             },
             getImage() {
-                const user = firebase.auth().currentUser 
+                const user = firebase.auth().currentUser
                 
-                // Get image and push it in array
-                let image = event.currentTarget.files[0]
-                this.uploadedImages.push(image)
+                // Get images and push to array
+                let images = event.currentTarget.files
+                
+                for (let i = 0; i < images.length; i++) {
+                    if (images[i].name.lastIndexOf('.') <= 0) {
+                        this.errors.push('"' + images[i].name + '" does not have a valid file extension')
+                    } else {
+                        this.uploadedImages.push(images[i])   
+                        
+                        // Get dataURL of uploaded images and push to array
+                        const fileReader = new FileReader()
+                        fileReader.addEventListener('load', () => {
+                            this.imageUrls.push(fileReader.result)
+                        })
+                        fileReader.readAsDataURL(images[i])
+                    }
+                }
             },
             renameAndUploadImages() {
                 const user = firebase.auth().currentUser
@@ -453,6 +473,26 @@
                         this.errors.push(error.message)
                     })
                 } 
+            },
+            removeImage(event) {
+                // Get index of parent container
+                const imageContainer = event.currentTarget.parentNode
+                const thisIndex = this.indexInParent(imageContainer)
+                
+                // Remove image from arrays
+                if (thisIndex > -1) {
+                    this.imageUrls.splice(thisIndex, 1)
+                    this.uploadedImages.splice(thisIndex, 1)
+                }
+            },
+            indexInParent(node) {
+                let children = node.parentNode.childNodes
+                let num = 0
+                for (let i = 0; i < children.length; i++) {
+                     if (children[i] == node) return num
+                     if (children[i].nodeType == 1) num++
+                }
+                return -1
             }
 //            uploadImage() {
 //                let uploadProgress = document.getElementById("upload-progress")
