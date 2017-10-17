@@ -275,7 +275,7 @@
             <h4 style="margin: 20px 0 10px 0">YOUTUBE</h4>
             <h4 style="margin: 20px 0 10px 0">FOTO'S</h4>
             <div>
-                <div v-for="(imageUrl, index) in imageUrls">
+                <div v-for="(imageUrl, index) in temporaryImages">
                     <img :src="imageUrl" height="100"> <span v-on:click="removeImage">DELETE</span>
                 </div>
             </div>
@@ -336,7 +336,7 @@
                 availability: '',
                 uploadedImages: [],
                 listingPostKey: '',
-                imageUrls: []
+                temporaryImages: []
             }
         },
         computed: {
@@ -353,7 +353,7 @@
                     const user = firebase.auth().currentUser
                     const listingPostKey = firebase.database().ref('listings/').push().key
                     const listingRef = firebase.database().ref('listings/' + listingPostKey)
-                    
+
                     this.listingPostKey = listingPostKey
 
                     let newListingData = {
@@ -432,39 +432,45 @@
             },
             getImage() {
                 const user = firebase.auth().currentUser
-                
-                // Get images and push to array
+                this.errors = []
+
+                // Get images and push to array if amount does not exceed 5
                 let images = event.currentTarget.files
-                
-                for (let i = 0; i < images.length; i++) {
-                    if (images[i].name.lastIndexOf('.') <= 0) {
-                        this.errors.push('"' + images[i].name + '" does not have a valid file extension')
-                    } else {
-                        this.uploadedImages.push(images[i])   
-                        
-                        // Get dataURL of uploaded images and push to array
-                        const fileReader = new FileReader()
-                        fileReader.addEventListener('load', () => {
-                            this.imageUrls.push(fileReader.result)
-                        })
-                        fileReader.readAsDataURL(images[i])
+                let sumImages = images.length + this.uploadedImages.length
+
+                if (images.length <= 5 && sumImages <= 5) {
+                    for (let i = 0; i < images.length; i++) {
+                        if (images[i].name.lastIndexOf('.') <= 0) {
+                            this.errors.push('"' + images[i].name + '" does not have a valid file extension')
+                        } else {
+                            this.uploadedImages.push(images[i])
+
+                            // Get dataURL of uploaded images and push to array
+                            const fileReader = new FileReader()
+                            fileReader.addEventListener('load', () => {
+                                this.temporaryImages.push(fileReader.result)
+                            })
+                            fileReader.readAsDataURL(images[i])
+                        }
                     }
+                } else {
+                    this.errors.push("You can only upload a maximum of 5 images")
                 }
             },
             renameAndUploadImages() {
                 const user = firebase.auth().currentUser
-                
+
                 for (let i = 0; i < this.uploadedImages.length; i++) {
-                    
+
                     // Rename image
                     let imageName = this.uploadedImages[i].name
                     let imageExtension = imageName.split('.').pop()
-                    let newImageName = this.listingPostKey + i + '.' +imageExtension
+                    let newImageName = this.listingPostKey + i + '.' + imageExtension
                     imageName = newImageName
-                   
+
                     // Create storageRef for each image
                     let storageRef = firebase.storage().ref('images/' + user.uid + '/' + imageName)
-                    
+
                     // Upload images
                     storageRef.put(this.uploadedImages[i]).then(() => {
                         console.log(imageName + " has been uploaded")
@@ -472,16 +478,17 @@
                         console.log(error.message)
                         this.errors.push(error.message)
                     })
-                } 
+                }
             },
             removeImage(event) {
+                this.errors = []
                 // Get index of parent container
                 const imageContainer = event.currentTarget.parentNode
                 const thisIndex = this.indexInParent(imageContainer)
-                
+
                 // Remove image from arrays
                 if (thisIndex > -1) {
-                    this.imageUrls.splice(thisIndex, 1)
+                    this.temporaryImages.splice(thisIndex, 1)
                     this.uploadedImages.splice(thisIndex, 1)
                 }
             },
@@ -489,20 +496,20 @@
                 let children = node.parentNode.childNodes
                 let num = 0
                 for (let i = 0; i < children.length; i++) {
-                     if (children[i] == node) return num
-                     if (children[i].nodeType == 1) num++
+                    if (children[i] == node) return num
+                    if (children[i].nodeType == 1) num++
                 }
                 return -1
             }
-//            uploadImage() {
-//                let uploadProgress = document.getElementById("upload-progress")
-//                let uploadChoose = document.getElementById("upload-choose")
-//                let uploadSubmit = document.getElementById("upload-submit")
-//                
-//                console.log(uploadProgress)
-//                console.log(uploadChoose)
-//                console.log(uploadSubmit)
-//            }
+            //            uploadImage() {
+            //                let uploadProgress = document.getElementById("upload-progress")
+            //                let uploadChoose = document.getElementById("upload-choose")
+            //                let uploadSubmit = document.getElementById("upload-submit")
+            //                
+            //                console.log(uploadProgress)
+            //                console.log(uploadChoose)
+            //                console.log(uploadSubmit)
+            //            }
         }
     }
 
