@@ -335,10 +335,10 @@
                 extra_info: '',
                 availability: '',
                 images_url: [],
-
+                
                 // Storage
                 uploadedImages: [],
-
+                
                 // Temporary
                 temporaryImages: [],
 
@@ -356,7 +356,7 @@
         methods: {
             submitCreateForm() {
                 this.errors = []
-
+                
                 if (this.isFormValid()) {
                     const user = firebase.auth().currentUser
                     const listingPostKey = firebase.database().ref('listings/').push().key
@@ -365,32 +365,33 @@
                     this.listingPostKey = listingPostKey
                     this.listingRef = listingRef
 
-                    // Map uploadedImages to array of uploadTasks (promises)
-                    const uploads = this.uploadedImages.map((uploadedImage, index) => {
-                        // Rename the images
-                        let imageName = uploadedImage.name
+                    for (let i = 0; i < this.uploadedImages.length; i++) {
+
+                        // Rename image
+                        let imageName = this.uploadedImages[i].name
                         let imageExtension = imageName.split('.').pop()
-                        let newImageName = this.listingPostKey + index + '.' + imageExtension
+                        let newImageName = this.listingPostKey + i + '.' + imageExtension
                         imageName = newImageName
-                        
-                        const storageRef = firebase.storage().ref('images/' + user.uid + '/' + imageName)
-                        const uploadTask = storageRef.put(uploadedImage)
-                        console.log("image " + index + " uploaded")
-                        
-                        // Get progress of uploadTask - Delete?
-                        uploadTask.on('state_changed', snapshot => {
-                            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                        })
 
-                        return uploadTask.then(snapshot => {
-                            this.images_url.push(snapshot.downloadURL)
-                        })
-                    })
+                        // Create storageRef for each image
+                        // Upload each image
+                        let storageRef = firebase.storage().ref('images/' + user.uid + '/' + imageName)
+                        let uploadTask = storageRef.put(this.uploadedImages[i])
 
-                    // Wait for all uploadTasks to be done
-                    Promise.all(uploads).then(() => {
-                        this.createListing()
-                    })
+                        // Listen for state changes, errors, and completion of the upload.
+                        uploadTask.on('state_changed', (snapshot) => {
+                            // Get upload progress
+                            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                            console.log('Upload is ' + progress + '% done')
+                        }, error => {
+                            this.errors.push(error.message)
+                        }, () => {
+                            // Upload complete
+                            let downloadURL = uploadTask.snapshot.downloadURL;
+                            this.images_url.push(downloadURL)
+                            this.createListing()
+                        })
+                    }
                 }
             },
             createListing() {

@@ -175,7 +175,7 @@
                 <div>
                     <input type="radio" id="food_food_a_food_a2" name="foodOptions" :value="food.food_a" v-on:click="food.food_a = $event.currentTarget.nextElementSibling.firstChild.value">
                     <label for="food_food_a_food_a2">
-                        <input type="number" min="1" value="1" @input="food.food_a = $event.target.value" v-on:click="setCheckedFoodA" v-on:keyup="checkNumber">/dag
+                        <input type="number" min="1" value="1" @input="food.food_a = $event.target.value" v-on:click="setChecked" v-on:keyup="checkNumber">/dag
                     </label>
                 </div>
                 <div>
@@ -204,7 +204,7 @@
                 <div>
                     <input type="radio" id="stable_cleaning_cleaning_b" name="cleaningOptions" v-on:click="stable.cleaning = $event.currentTarget.nextElementSibling.firstChild.value">
                     <label for="stable_cleaning_cleaning_b">
-                        <input type="number" min="1" value="1" @input="stable.cleaning = $event.target.value" v-on:click="setCheckedStable" v-on:keyup="checkNumber">/week
+                        <input type="number" min="1" value="1" @input="stable.cleaning = $event.target.value" v-on:click="setChecked" v-on:keyup="checkNumber">/week
                     </label>
                 </div>
             </div>
@@ -284,7 +284,7 @@
             
             
             <div>
-                <input type="submit" value="Plaatsen" v-on:click.prevent="submitCreateForm">
+                <input type="submit" value="Plaatsen" v-on:click.prevent="createListing">
             </div>
         </form>
         <div v-if="hasErrors">
@@ -334,17 +334,10 @@
                 },
                 extra_info: '',
                 availability: '',
-                images_url: [],
-
-                // Storage
                 uploadedImages: [],
-
-                // Temporary
+                uploadedImagesUrl: [],
                 temporaryImages: [],
-
-                // Firebase
-                listingPostKey: '',
-                listingRef: ''
+                listingPostKey: ''
             }
         },
         computed: {
@@ -354,7 +347,7 @@
             ...mapGetters(['currentUser'])
         },
         methods: {
-            submitCreateForm() {
+            createListing() {
                 this.errors = []
 
                 if (this.isFormValid()) {
@@ -363,79 +356,48 @@
                     const listingRef = firebase.database().ref('listings/' + listingPostKey)
 
                     this.listingPostKey = listingPostKey
-                    this.listingRef = listingRef
 
-                    // Map uploadedImages to array of uploadTasks (promises)
-                    const uploads = this.uploadedImages.map((uploadedImage, index) => {
-                        // Rename the images
-                        let imageName = uploadedImage.name
-                        let imageExtension = imageName.split('.').pop()
-                        let newImageName = this.listingPostKey + index + '.' + imageExtension
-                        imageName = newImageName
-                        
-                        const storageRef = firebase.storage().ref('images/' + user.uid + '/' + imageName)
-                        const uploadTask = storageRef.put(uploadedImage)
-                        console.log("image " + index + " uploaded")
-                        
-                        // Get progress of uploadTask - Delete?
-                        uploadTask.on('state_changed', snapshot => {
-                            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                        })
+                    let newListingData = {
+                        userid: user.uid,
+                        name: this.name,
+                        address: this.address,
+                        postalcode: this.postalcode,
+                        email: this.email,
+                        phone: this.phone,
+                        website: this.website,
+                        socialmedia: this.socialmedia,
 
-                        return uploadTask.then(snapshot => {
-                            this.images_url.push(snapshot.downloadURL)
-                        })
-                    })
+                        // Practical Data
+                        type: this.type,
+                        accomodation: this.accomodation,
+                        offer: this.offer,
+                        discipline: this.discipline,
 
-                    // Wait for all uploadTasks to be done
-                    Promise.all(uploads).then(() => {
-                        this.createListing()
+                        // Extra Info
+                        food: {
+                            food_a: this.food.food_a,
+                            food_b: this.food.food_b
+                        },
+                        stable: {
+                            cleaning: this.stable.cleaning,
+                            floor: this.stable.floor,
+                            hygiene: this.stable.hygiene,
+                            storage: this.stable.storage,
+                            cafetaria: this.stable.cafetaria
+                        },
+                        extra_info: this.extra_info,
+                        availability: this.availability,
+                        uploadedImagesUrl: this.uploadedImagesUrl
+                    }
+
+                    return listingRef.update(newListingData).then(() => {
+                        console.log("listing posted")
+                        this.renameAndUploadImages()
+                    }, error => {
+                        console.log(error.message)
+                        this.errors.push(error.message)
                     })
                 }
-            },
-            createListing() {
-                this.errors = []
-                const user = firebase.auth().currentUser
-
-                let newListingData = {
-                    userid: user.uid,
-                    name: this.name,
-                    address: this.address,
-                    postalcode: this.postalcode,
-                    email: this.email,
-                    phone: this.phone,
-                    website: this.website,
-                    socialmedia: this.socialmedia,
-
-                    // Practical Data
-                    type: this.type,
-                    accomodation: this.accomodation,
-                    offer: this.offer,
-                    discipline: this.discipline,
-
-                    // Extra Info
-                    food: {
-                        food_a: this.food.food_a,
-                        food_b: this.food.food_b
-                    },
-                    stable: {
-                        cleaning: this.stable.cleaning,
-                        floor: this.stable.floor,
-                        hygiene: this.stable.hygiene,
-                        storage: this.stable.storage,
-                        cafetaria: this.stable.cafetaria
-                    },
-                    extra_info: this.extra_info,
-                    availability: this.availability,
-                    images_url: this.images_url
-                }
-
-                return this.listingRef.update(newListingData).then(() => {
-                    console.log("listing posted")
-                }, error => {
-                    console.log(error.message)
-                    this.errors.push(error.message)
-                })
             },
             isEmpty() {
                 if (
@@ -460,15 +422,9 @@
                 }
                 return true
             },
-            setCheckedStable(event) {
+            setChecked(event) {
                 let radioBtn = event.currentTarget.parentElement.previousElementSibling
                 radioBtn.checked = true
-                this.stable.cleaning = event.target.value
-            },
-            setCheckedFoodA(event) {
-                let radioBtn = event.currentTarget.parentElement.previousElementSibling
-                radioBtn.checked = true
-                this.food.food_a = event.target.value
             },
             checkNumber(event) {
                 let inputValue = event.currentTarget
@@ -501,6 +457,36 @@
                     }
                 } else {
                     this.errors.push("You can only upload a maximum of 5 images")
+                }
+            },
+            renameAndUploadImages() {
+                const user = firebase.auth().currentUser
+
+                for (let i = 0; i < this.uploadedImages.length; i++) {
+
+                    // Rename image
+                    let imageName = this.uploadedImages[i].name
+                    let imageExtension = imageName.split('.').pop()
+                    let newImageName = this.listingPostKey + i + '.' + imageExtension
+                    imageName = newImageName
+
+                    // Create storageRef for each image
+                    // Upload each image
+                    let storageRef = firebase.storage().ref('images/' + user.uid + '/' + imageName)
+                    let uploadTask = storageRef.put(this.uploadedImages[i])
+
+                    // Listen for state changes, errors, and completion of the upload.
+                    uploadTask.on('state_changed', (snapshot) => {
+                        // Get upload progress
+                        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        console.log('Upload is ' + progress + '% done')
+                    }, error => {
+                        this.errors.push(error.message)
+                    }, () => {
+                        // Upload complete
+                        let downloadURL = uploadTask.snapshot.downloadURL;
+                        this.uploadedImagesUrl.push(downloadURL)  
+                    })
                 }
             },
             removeImage(event) {
