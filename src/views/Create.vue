@@ -280,7 +280,7 @@
                 </div>
             </div>
             <progress id="upload-progress" value="0" max="100">0%</progress>
-            <input id="upload-choose" type="file" value="upload" v-on:change="getImage" multiple>
+            <input id="upload-choose" type="file" value="upload" v-on:change="getImageAndResize" multiple>
             
             
             <div>
@@ -369,14 +369,15 @@
                     const uploads = this.uploadedImages.map((uploadedImage, index) => {
                         // Rename the images
                         let imageName = uploadedImage.name
-                        let imageExtension = imageName.split('.').pop()
+                        let imageExtension = imageName.split('.').pop().toLowerCase()
                         let newImageName = this.listingPostKey + index + '.' + imageExtension
                         imageName = newImageName
-                        
+
+                        // Create a storage reference and an upload task to that reference
                         const storageRef = firebase.storage().ref('images/' + user.uid + '/' + imageName)
                         const uploadTask = storageRef.put(uploadedImage)
                         console.log("image " + index + " uploaded")
-                        
+
                         // Get progress of uploadTask - Delete?
                         uploadTask.on('state_changed', snapshot => {
                             var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
@@ -476,7 +477,7 @@
                     inputValue.value = 1
                 }
             },
-            getImage() {
+            getImageAndResize() {
                 const user = firebase.auth().currentUser
                 this.errors = []
 
@@ -489,14 +490,26 @@
                         if (images[i].name.lastIndexOf('.') <= 0) {
                             this.errors.push('"' + images[i].name + '" does not have a valid file extension')
                         } else {
-                            this.uploadedImages.push(images[i])
-
-                            // Get dataURL of uploaded images and push to array
+                            // Get dataURL of added images and push to temporary array
                             const fileReader = new FileReader()
                             fileReader.addEventListener('load', () => {
                                 this.temporaryImages.push(fileReader.result)
                             })
                             fileReader.readAsDataURL(images[i])
+
+                            // Resize the image
+                            this.resizeImage({
+                                file: images[i],
+                                maxSize: 500
+                            }).then((resizedImage) => {
+                                resizedImage.lastModifiedDate = new Date()
+                                resizedImage.name = images[i].name
+
+                                // Push images to array
+                                this.uploadedImages.push(resizedImage)
+                            }).catch((error) => {
+                                console.log(error)
+                            })
                         }
                     }
                 } else {
@@ -523,16 +536,60 @@
                     if (children[i].nodeType == 1) num++
                 }
                 return -1
+            },
+            resizeImage(settings) {
+                var file = settings.file
+                var maxSize = settings.maxSize
+                var reader = new FileReader()
+                var image = new Image()
+                var canvas = document.createElement('canvas')
+                var dataURItoBlob = (dataURI) => {
+                    var bytes = dataURI.split(',')[0].indexOf('base64') >= 0 ?
+                        atob(dataURI.split(',')[1]) :
+                        unescape(dataURI.split(',')[1])
+                    var mime = dataURI.split(',')[0].split(':')[1].split(';')[0]
+                    var max = bytes.length
+                    var ia = new Uint8Array(max)
+                    for (var i = 0; i < max; i++)
+                        ia[i] = bytes.charCodeAt(i)
+                    return new Blob([ia], {
+                        type: mime
+                    });
+                };
+                var resize = () => {
+                    var width = image.width
+                    var height = image.height
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height *= maxSize / width
+                            width = maxSize
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width *= maxSize / height
+                            height = maxSize
+                        }
+                    }
+                    canvas.width = width
+                    canvas.height = height
+                    canvas.getContext('2d').drawImage(image, 0, 0, width, height)
+                    var dataUrl = canvas.toDataURL('image/jpeg')
+                    return dataURItoBlob(dataUrl)
+                };
+                return new Promise((ok, no) => {
+                    if (!file.type.match(/image.*/)) {
+                        no(new Error("Not an image"))
+                        return
+                    }
+                    reader.onload = (readerEvent) => {
+                        image.onload = () => {
+                            return ok(resize())
+                        }
+                        image.src = readerEvent.target.result 
+                    }
+                    reader.readAsDataURL(file)
+                })
             }
-            //            uploadImage() {
-            //                let uploadProgress = document.getElementById("upload-progress")
-            //                let uploadChoose = document.getElementById("upload-choose")
-            //                let uploadSubmit = document.getElementById("upload-submit")
-            //                
-            //                console.log(uploadProgress)
-            //                console.log(uploadChoose)
-            //                console.log(uploadSubmit)
-            //            }
         }
     }
 
