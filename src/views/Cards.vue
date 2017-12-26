@@ -1,13 +1,13 @@
 <template>
 <section class="cards">
-    <div class="card" v-bind:data-id="card.id" v-for="card in cards">
+    <div class="card" v-for="listing in listings">
         <figure class="card__figure">
-            <img class="card__figure__image" src="../assets/img/card2.jpg" alt="">
-<!--        <img v-bind:src="card.image" alt="">-->
+            <img class="card__figure__image" :src="listing.images_url[0]" alt="">
             <figcaption class="card__figure__figcaption">
                 <div class="card__figure__figcaption__info">
-                    <span class="card__figure__figcaption__info__type icon" v-bind:class="['icon--' + card.type]"></span>
-                    <h2 class="card__figure__figcaption__info__location">{{ card.location }}</h2>
+<!--                    <span class="card__figure__figcaption__info__type icon" v-bind:class="['icon--' + card.type]"></span>-->
+                    <h2 class="card__figure__figcaption__info__location">{{ listing.contact.postalcode }}</h2>
+                    <h2 class="card__figure__figcaption__info__location">{{ listing.practical.type }}</h2>
                 </div>
             </figcaption>
         </figure>
@@ -20,27 +20,15 @@
     export default {
         data() {
             return {
-                cards: [
-                    {
-                        id: 1,
-                        image: '', 
-                        type: 'paddock-paradise',
-                        location: 'Kalmthout'
-                    },
-                    {
-                        id: 2,
-                        image: '',
-                        type: 'weide',
-                        location: 'Chaussé-Notre-Dame-Louvignies' 
-                    },
-                    {
-                        id: 3,
-                        image: '',
-                        type: 'stalling',
-                        location: 'Sint-Job-in\'t-Goor'  
-                    }
-                ]
+                listings: {}
             }
-        }
+        },
+        created() {
+            const listingsRef = firebase.database().ref().child('listings')
+
+            return listingsRef.once('value', snapshot => {
+                this.listings = snapshot.val()
+            })
+        },
     }
 </script>

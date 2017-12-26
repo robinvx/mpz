@@ -5,37 +5,37 @@
         <form id="form__create">
             <h3 style="margin-top: 20px">STAP 1 - CONTACT</h3>
             <div>
-                <input type="text" name="name" placeholder="Naam" v-model="listingData.name">
+                <input type="text" name="name" placeholder="Naam" v-model="listingData.contact.name">
             </div>
             <div>
-                <input type="text" name="address" placeholder="Adres" v-model="listingData.address">
+                <input type="text" name="address" placeholder="Adres" v-model="listingData.contact.address">
             </div>
             <div>
-                <input type="number" name="postalcode" placeholder="Postcode" v-model.trim="listingData.postalcode">
+                <input type="number" name="postalcode" placeholder="Postcode" v-model.trim="listingData.contact.postalcode">
             </div>
             <div>
-                <input type="email" name="email" placeholder="E-mail adres" v-model.trim="listingData.email">
+                <input type="email" name="email" placeholder="E-mail adres" v-model.trim="listingData.contact.email">
             </div>
             <div>
-                <input type="text" name="phone" placeholder="Telefoonnummer" v-model.trim="listingData.phone">
+                <input type="text" name="phone" placeholder="Telefoonnummer" v-model.trim="listingData.contact.phone">
             </div>
             <div>
-                <input type="text" name="website" placeholder="Website" v-model.trim="listingData.website">
+                <input type="text" name="website" placeholder="Website" v-model.trim="listingData.contact.website">
             </div>
             
             <h3 style="margin-top: 20px">STAP 2 - PRAKTISCH</h3>
             <h4 style="margin: 20px 0 10px 0">Type</h4>
             <div>
                 <div>
-                    <input type="radio" id="type_stalling" value="Stalling" v-model="listingData.type">
+                    <input type="radio" id="type_stalling" value="Stalling" v-model="listingData.practical.type">
                     <label for="type_stalling">Stalling</label>
                 </div>
                 <div>
-                    <input type="radio" id="type_weide" value="Weide" v-model="listingData.type">
+                    <input type="radio" id="type_weide" value="Weide" v-model="listingData.practical.type">
                     <label for="type_weide">Weide</label>
                 </div>
                 <div>
-                    <input type="radio" id="type_paddockparadise" value="Paddock Paradise" v-model="listingData.type">
+                    <input type="radio" id="type_paddockparadise" value="Paddock Paradise" v-model="listingData.practical.type">
                     <label for="type_paddockparadise">Paddock Paradise</label>
                 </div>
             </div>
@@ -44,68 +44,76 @@
             <h4 style="margin: 20px 0 10px 0">Accomodatie</h4>
             <div>
                 <div>
-                    <input type="checkbox" id="accomodation_binnenpiste" value="Binnenpiste" v-model="listingData.accomodation">
+                    <input type="checkbox" id="accomodation_binnenpiste" class="accomodation" value="Binnenpiste" v-model="listingData.practical.accomodation">
                     <label for="accomodation_binnenpiste">Binnenpiste</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="accomodation_buitenpiste" value="Buitenpiste" v-model="listingData.accomodation">
+                    <input type="checkbox" id="accomodation_buitenpiste" class="accomodation" value="Buitenpiste" v-model="listingData.practical.accomodation">
                     <label for="accomodation_buitenpiste">Buitenpiste</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="accomodation_roundpen" value="Roundpen" v-model="listingData.accomodation">
+                    <input type="checkbox" id="accomodation_roundpen" class="accomodation" value="Roundpen" v-model="listingData.practical.accomodation">
                     <label for="accomodation_roundpen">Roundpen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="accomodation_weidegang" value="Mogelijkheid tot weidegang" v-model="listingData.accomodation">
-                    <label for="accomodation_weidegang">Mogelijkheid tot weidegang</label>
+                    <input type="checkbox" id="accomodation_weidegang" value="Mogelijkheid tot weidegang" v-model="listingData.practical.accomodation" @click="toggleWeidegang">
+                    <label for="accomodation_weidegang">Mogelijkheid tot weidegang</label>   
+                             
+                    <div v-show="weidegangChecked">
+                        <input type="number" id="accomodation_weidegang_hours" min="1" max="24" value="1" v-on:keyup="checkHour" v-model="listingData.practical.accomodationhours">
+                        <label for="accomodation_weidegang_hours">uur/dag</label>
+                    </div>
                 </div>
                 <div>
-                    <input type="checkbox" id="accomodation_samenstaan" value="Mogelijkheid tot samenstaan met andere paarden" v-model="listingData.accomodation">
+                    <input type="checkbox" id="accomodation_samenstaan" class="accomodation" value="Mogelijkheid tot samenstaan met andere paarden" v-model="listingData.practical.accomodation">
                     <label for="accomodation_samenstaan">Mogelijkheid tot samenstaan met andere paarden</label>
                 </div>
+                
+                
+
             </div>
             
             
             <h4 style="margin: 20px 0 10px 0">Aanbod</h4>
             <div>
                 <div>
-                    <input type="checkbox" id="offer_groepslessen_prive" value="Groepslessen privé" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_groepslessen_prive" value="Groepslessen privé" v-model="listingData.practical.offer">
                     <label for="offer_groepslessen_prive">Groepslessen privé</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_groepslessen_manegepaarden" value="Groepslessen manègepaarden" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_groepslessen_manegepaarden" value="Groepslessen manègepaarden" v-model="listingData.practical.offer">
                     <label for="offer_groepslessen_manegepaarden">Groepslessen manègepaarden</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_privelessen" value="Privélessen" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_privelessen" value="Privélessen" v-model="listingData.practical.offer">
                     <label for="offer_privelessen">Privélessen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_externe_instructeur" value="Mogelijkheid tot externe instructeur" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_externe_instructeur" value="Mogelijkheid tot externe instructeur" v-model="listingData.practical.offer">
                     <label for="offer_externe_instructeur">Mogelijkheid tot externe instructeur</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_begeleide_buitenritten" value="Begeleide buitenritten" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_begeleide_buitenritten" value="Begeleide buitenritten" v-model="listingData.practical.offer">
                     <label for="offer_begeleide_buitenritten">Begeleide buitenritten</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_kinderkampen" value="Kinderkampen" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_kinderkampen" value="Kinderkampen" v-model="listingData.practical.offer">
                     <label for="offer_kinderkampen">Kinderkampen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_erkende_opleidingen" value="Erkende opleidingen" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_erkende_opleidingen" value="Erkende opleidingen" v-model="listingData.practical.offer">
                     <label for="offer_erkende_opleidingen">Erkende opleidingen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_training_paard" value="Training voor het paard" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_training_paard" value="Training voor het paard" v-model="listingData.practical.offer">
                     <label for="offer_training_paard">Training voor het paard</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_clinics" value="Clinics" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_clinics" value="Clinics" v-model="listingData.practical.offer">
                     <label for="offer_clinics">Clinics</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_winkel" value="Winkel" v-model="listingData.offer">
+                    <input type="checkbox" id="offer_winkel" value="Winkel" v-model="listingData.practical.offer">
                     <label for="offer_winkel">Winkel</label>
                 </div>
             </div>
@@ -114,51 +122,51 @@
             <h4 style="margin: 20px 0 10px 0">Discipline</h4>
             <div>
                 <div>
-                    <input type="checkbox" id="discipline_recreatie" value="Recreatie" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_recreatie" value="Recreatie" v-model="listingData.practical.discipline">
                     <label for="discipline_recreatie">Recreatie</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_dressuur" value="Dressuur" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_dressuur" value="Dressuur" v-model="listingData.practical.discipline">
                     <label for="discipline_dressuur">Dressuur</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_natural_horsemanship" value="Natural Horsemanship" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_natural_horsemanship" value="Natural Horsemanship" v-model="listingData.practical.discipline">
                     <label for="discipline_natural_horsemanship">Natural Horsemanship</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_fokkerij" value="Fokkerij" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_fokkerij" value="Fokkerij" v-model="listingData.practical.discipline">
                     <label for="discipline_fokkerij">Fokkerij</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_trickriding" value="Trickriding" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_trickriding" value="Trickriding" v-model="listingData.practical.discipline">
                     <label for="discipline_trickriding">Trickriding</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_eventing" value="Eventing" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_eventing" value="Eventing" v-model="listingData.practical.discipline">
                     <label for="discipline_eventing">Eventing</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_springen" value="Springen" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_springen" value="Springen" v-model="listingData.practical.discipline">
                     <label for="discipline_springen">Springen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_western" value="Western" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_western" value="Western" v-model="listingData.practical.discipline">
                     <label for="discipline_western">Western</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_academische_rijkunst" value="Academische rijkunst" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_academische_rijkunst" value="Academische rijkunst" v-model="listingData.practical.discipline">
                     <label for="discipline_academische_rijkunst">Academische rijkunst</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_voltige" value="Voltige" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_voltige" value="Voltige" v-model="listingData.practical.discipline">
                     <label for="discipline_voltige">Voltige</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_endurance" value="Endurance" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_endurance" value="Endurance" v-model="listingData.practical.discipline">
                     <label for="discipline_endurance">Endurance</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_mennen" value="Mennen" v-model="listingData.discipline">
+                    <input type="checkbox" id="discipline_mennen" value="Mennen" v-model="listingData.practical.discipline">
                     <label for="discipline_mennen">Mennen</label>
                 </div>
             </div>
@@ -169,28 +177,28 @@
             <h5 style="margin-top: 20px">Ruwvoeder</h5>
             <div>
                 <div>
-                    <input type="radio" id="food_food_a_food_a1" name="foodOptions" value="24/7" v-model="listingData.food.food_a">
+                    <input type="radio" id="food_food_a_food_a1" name="foodOptions" value="24/7" v-model="listingData.extra_info.food.food_a">
                     <label for="food_food_a_food_a1">24/7</label>
                 </div>
                 <div>
-                    <input type="radio" id="food_food_a_food_a2" name="foodOptions" :value="listingData.food.food_a" v-on:click="listingData.food.food_a = $event.currentTarget.nextElementSibling.firstChild.value">
+                    <input type="radio" id="food_food_a_food_a2" name="foodOptions" :value="listingData.extra_info.food.food_a" v-on:click="listingData.extra_info.food.food_a = $event.currentTarget.nextElementSibling.firstChild.value">
                     <label for="food_food_a_food_a2">
-                        <input type="number" min="1" value="1" @input="listingData.food.food_a = $event.target.value" v-on:click="setCheckedFoodA" v-on:keyup="checkNumber">/dag
+                        <input type="number" min="1" value="1" @input="listingData.extra_info.food.food_a = $event.target.value" v-on:click="setCheckedFoodA" v-on:keyup="checkNumber">/dag
                     </label>
                 </div>
                 <div>
-                    <input type="radio" id="food_food_a_food_a3" name="foodOptions" value="Verantwoordelijkheid van de klant" v-model="listingData.food.food_a">
+                    <input type="radio" id="food_food_a_food_a3" name="foodOptions" value="Verantwoordelijkheid van de klant" v-model="listingData.extra_info.food.food_a">
                     <label for="food_food_a_food_a3">Verantwoordelijkheid van de klant</label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Krachtvoer</h5>
             <div>
                 <div>
-                    <input type="radio" id="food_food_b_food_b1" value="Keuze van de klant" v-model="listingData.food.food_b">
+                    <input type="radio" id="food_food_b_food_b1" value="Keuze van de klant" v-model="listingData.extra_info.food.food_b">
                     <label for="food_food_b_food_b1">Keuze van de klant</label>
                 </div>
                 <div>
-                    <input type="radio" id="food_b2" value="Nee" v-model="listingData.food.food_b">
+                    <input type="radio" id="food_b2" value="Nee" v-model="listingData.extra_info.food.food_b">
                     <label for="food_b2">Nee</label>
                 </div>
             </div>
@@ -198,81 +206,176 @@
             <div>
                 <h5 style="margin-top: 20px;">Mest de klant zelf uit?</h5>
                 <div>
-                    <input type="radio" id="stable_cleaning_cleaning_a" name="cleaningOptions" value="Nee" v-model="listingData.stable.cleaning">
+                    <input type="radio" id="stable_cleaning_cleaning_a" name="cleaningOptions" value="Nee" v-model="listingData.extra_info.stable.cleaning">
                     <label for="stable_cleaning_cleaning_a">Nee</label>
                 </div>
                 <div>
-                    <input type="radio" id="stable_cleaning_cleaning_b" name="cleaningOptions" v-on:click="listingData.stable.cleaning = $event.currentTarget.nextElementSibling.firstChild.value">
+                    <input type="radio" id="stable_cleaning_cleaning_b" name="cleaningOptions" v-on:click="listingData.extra_info.stable.cleaning = $event.currentTarget.nextElementSibling.firstChild.value">
                     <label for="stable_cleaning_cleaning_b">
-                        <input type="number" min="1" value="1" @input="listingData.stable.cleaning = $event.target.value" v-on:click="setCheckedStable" v-on:keyup="checkNumber">/week
+                        <input type="number" min="1" value="1" @input="listingData.extra_info.stable.cleaning = $event.target.value" v-on:click="setCheckedStable" v-on:keyup="checkNumber">/week
                     </label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Stalbedekking</h5>
             <div>
                 <div>
-                    <input type="checkbox" id="stable_floor_stro" value="Stro" v-model="listingData.stable.floor">
+                    <input type="checkbox" id="stable_floor_stro" value="Stro" v-model="listingData.extra_info.stable.floor">
                     <label for="stable_floor_stro">Stro</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_floor_vlas" value="Vlas" v-model="listingData.stable.floor">
+                    <input type="checkbox" id="stable_floor_vlas" value="Vlas" v-model="listingData.extra_info.stable.floor">
                     <label for="stable_floor_vlas">Vlas</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_floor_houtkrullen" value="Houtkrullen" v-model="listingData.stable.floor">
+                    <input type="checkbox" id="stable_floor_houtkrullen" value="Houtkrullen" v-model="listingData.extra_info.stable.floor">
                     <label for="stable_floor_houtkrullen">Houtkrullen</label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Verzorging</h5>
             <div>
                 <div>
-                    <input type="checkbox" id="stable_hygiene_poetsplaats" value="Poetsplaats" v-model="listingData.stable.hygiene">
+                    <input type="checkbox" id="stable_hygiene_poetsplaats" value="Poetsplaats" v-model="listingData.extra_info.stable.hygiene">
                     <label for="stable_hygiene_poetsplaats">Poetsplaats</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_hygiene_wasplaats" value="Wasplaats" v-model="listingData.stable.hygiene">
+                    <input type="checkbox" id="stable_hygiene_wasplaats" value="Wasplaats" v-model="listingData.extra_info.stable.hygiene">
                     <label for="stable_hygiene_wasplaats">Wasplaats</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_hygiene_solarium" value="Solarium" v-model="listingData.stable.hygiene">
+                    <input type="checkbox" id="stable_hygiene_solarium" value="Solarium" v-model="listingData.extra_info.stable.hygiene">
                     <label for="stable_hygiene_solarium">Solarium</label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Opberging</h5>
             <div>
                 <div>
-                    <input type="checkbox" id="stable_storage_zadelkamer" value="Zadelkamer" v-model="listingData.stable.storage">
+                    <input type="checkbox" id="stable_storage_zadelkamer" value="Zadelkamer" v-model="listingData.extra_info.stable.storage">
                     <label for="stable_storage_zadelkamer">Zadelkamer</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_storage_zadelrek" value="Zadelrek" v-model="listingData.stable.storage">
-                    <label for="stable_storage_zadelrek">Zadelrek</label>
+                    <input type="checkbox" id="stable_storage_zadelkast" value="Zadelkast" v-model="listingData.extra_info.stable.storage">
+                    <label for="stable_storage_zadelkast">Zadelkast</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_storage_vvdklant" value="Verantwoordelijkheid van de klant" v-model="listingData.stable.storage">
+                    <input type="checkbox" id="stable_storage_vvdklant" value="Verantwoordelijkheid van de klant" v-model="listingData.extra_info.stable.storage">
                     <label for="stable_storage_vvdklant">Verantwoordelijkheid van de klant</label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Cafetaria</h5>
             <div>
                 <div>
-                    <input type="checkbox" id="cafetaria_sanitair" value="Sanitair" v-model="listingData.stable.cafetaria">
+                    <input type="checkbox" id="cafetaria_sanitair" value="Sanitair" v-model="listingData.extra_info.stable.cafetaria">
                     <label for="cafetaria_sanitair">Sanitair</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="cafetaria_food" value="Mogelijkheid tot eten" v-model="listingData.stable.cafetaria">
+                    <input type="checkbox" id="cafetaria_food" value="Mogelijkheid tot eten" v-model="listingData.extra_info.stable.cafetaria">
                     <label for="cafetaria_food">Mogelijkheid tot eten</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="cafetaria_zelfbediening" value="Zelfbediening" v-model="listingData.stable.cafetaria">
+                    <input type="checkbox" id="cafetaria_zelfbediening" value="Zelfbediening" v-model="listingData.extra_info.stable.cafetaria">
                     <label for="cafetaria_zelfbediening">Zelfbediening</label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Extra info</h5>
             <div>
-                <textarea id="extra_info" rows="4" v-model="listingData.extra_info"></textarea>
+                <textarea id="extra_info_comments" rows="4" v-model="listingData.extra_info.other.comments"></textarea>
             </div>
-            <h4 style="margin: 20px 0 10px 0">YOUTUBE</h4>
+            <div>
+                <input type="text" name="extra_info_facebook" placeholder="Facebook" v-model="listingData.extra_info.other.facebook">
+            </div>
+            <div>
+                <input type="text" name="extra_info_youtube" placeholder="Youtube" v-model="listingData.extra_info.other.youtube">
+            </div>
+            
+            <h5 style="margin-top: 20px;">Openingsuren</h5>
+            <div>
+                <div>
+                    <p style="margin-top:10px;">Maandag:</p>
+                    <div class="hide">
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.mon.time1"> - 
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.mon.time2">
+                    </div>
+                    
+                    <input type="radio" id="availability_mon_open" value="Open" v-model="listingData.extra_info.availability.mon.open" @click="showHours">
+                    <label for="availability_mon_open">Open</label> 
+                    <input type="radio" id="availability_mon_closed" value="Gesloten" v-model="listingData.extra_info.availability.mon.open" @click="hideHours">
+                    <label for="availability_mon_closed">Gesloten</label>   
+                </div>
+                <div>
+                    <p style="margin-top:10px;">Dinsdag:</p>
+                    <div class="hide">
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.tue.time1"> - 
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.tue.time2">
+                    </div>
+                    
+                    <input type="radio" id="availability_tue_open" value="Open" v-model="listingData.extra_info.availability.tue.open" @click="showHours">
+                    <label for="availability_tue_open">Open</label> 
+                    <input type="radio" id="availability_tue_closed" value="Gesloten" v-model="listingData.extra_info.availability.tue.open" @click="hideHours">
+                    <label for="availability_tue_closed">Gesloten</label>   
+                </div>
+                <div>
+                    <p style="margin-top:10px;">Woensdag:</p>
+                    <div class="hide">
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.wed.time1"> - 
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.wed.time2">
+                    </div>
+                    
+                    <input type="radio" id="availability_wed_open" value="Open" v-model="listingData.extra_info.availability.wed.open" @click="showHours">
+                    <label for="availability_wed_open">Open</label> 
+                    <input type="radio" id="availability_wed_closed" value="Gesloten" v-model="listingData.extra_info.availability.wed.open" @click="hideHours">
+                    <label for="availability_wed_closed">Gesloten</label> 
+                </div>
+                <div>
+                    <p style="margin-top:10px;">Donderdag:</p>
+                    <div class="hide">
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.thu.time1"> - 
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.thu.time2">
+                    </div>
+                    
+                    <input type="radio" id="availability_thu_open" value="Open" v-model="listingData.extra_info.availability.thu.open" @click="showHours">
+                    <label for="availability_thu_open">Open</label> 
+                    <input type="radio" id="availability_thu_closed" value="Gesloten" v-model="listingData.extra_info.availability.thu.open" @click="hideHours">
+                    <label for="availability_thu_closed">Gesloten</label> 
+                </div>
+                <div>
+                    <p style="margin-top:10px;">Vrijdag:</p>
+                    <div class="hide">
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.fri.time1"> - 
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.fri.time2">
+                    </div>
+                    
+                    <input type="radio" id="availability_fri_open" value="Open" v-model="listingData.extra_info.availability.fri.open" @click="showHours">
+                    <label for="availability_fri_open">Open</label> 
+                    <input type="radio" id="availability_fri_closed" value="Gesloten" v-model="listingData.extra_info.availability.fri.open" @click="hideHours">
+                    <label for="availability_fri_closed">Gesloten</label> 
+                </div>
+                <div>
+                    <p style="margin-top:10px;">Zaterdag:</p>
+                    <div class="hide">
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.sat.time1"> - 
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.sat.time2">
+                    </div>
+                    
+                    <input type="radio" id="availability_sat_open" value="Open" v-model="listingData.extra_info.availability.sat.open" @click="showHours">
+                    <label for="availability_sat_open">Open</label> 
+                    <input type="radio" id="availability_sat_closed" value="Gesloten" v-model="listingData.extra_info.availability.sat.open" @click="hideHours">
+                    <label for="availability_sat_closed">Gesloten</label>   
+                </div>
+                <div>
+                    <p style="margin-top:10px;">Zondag:</p>
+                    <div class="hide">
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.sun.time1"> - 
+                        <input type="time" min="00:00" max="24:00" v-model="listingData.extra_info.availability.sun.time2">
+                    </div>
+                    
+                    <input type="radio" id="availability_sun_open" value="Open" v-model="listingData.extra_info.availability.sun.open" @click="showHours">
+                    <label for="availability_sun_open">Open</label> 
+                    <input type="radio" id="availability_sun_closed" value="Gesloten" v-model="listingData.extra_info.availability.sun.open" @click="hideHours">
+                    <label for="availability_sun_closed">Gesloten</label>   
+                </div>
+            </div>
+
+            
             <h4 style="margin: 20px 0 10px 0">FOTO'S</h4>
             <div>
                 <div v-for="(imageUrl, index) in temporaryImages">
@@ -304,37 +407,85 @@
 
         data() {
             return {
+                weidegangChecked: false,
                 errors: [],
                 listingData: {
                     // Contact data
-                    name: '',
-                    address: '',
-                    postalcode: '',
-                    email: '',
-                    phone: '',
-                    website: '',
-                    socialmedia: {},
+                    contact: {
+                        name: '',
+                        address: '',
+                        postalcode: '',
+                        email: '',
+                        phone: '',
+                        website: ''
+                    },
 
                     // Practical Data
-                    type: [],
-                    accomodation: [],
-                    offer: [],
-                    discipline: [],
+                    practical: {
+                        type: [],
+                        accomodation: [],
+                        accomodationhours: 1,
+                        offer: [],
+                        discipline: []
+                    },
 
                     // Extra Info
-                    food: {
-                        food_a: [],
-                        food_b: []
+                    extra_info: {
+                        food: {
+                            food_a: [],
+                            food_b: []
+                        },
+                        stable: {
+                            cleaning: [],
+                            floor: [],
+                            hygiene: [],
+                            storage: [],
+                            cafetaria: []
+                        },
+                        other: {
+                            comments: '',
+                            youtube: '',
+                            facebook: ''
+                        },
+                        availability: {
+                            mon: {
+                                open: '',
+                                time1: '00:00',
+                                time2: '00:00'
+                            },
+                            tue: {
+                                open: '',
+                                time1: '00:00',
+                                time2: '00:00'
+                            },
+                            wed: {
+                                open: '',
+                                time1: '00:00',
+                                time2: '00:00'
+                            },
+                            thu: {
+                                open: '',
+                                time1: '00:00',
+                                time2: '00:00'
+                            },
+                            fri: {
+                                open: '',
+                                time1: '00:00',
+                                time2: '00:00'
+                            },
+                            sat: {
+                                open: '',
+                                time1: '00:00',
+                                time2: '00:00'
+                            },
+                            sun: {
+                                open: '',
+                                time1: '00:00',
+                                time2: '00:00'
+                            }
+                        }
                     },
-                    stable: {
-                        cleaning: [],
-                        floor: [],
-                        hygiene: [],
-                        storage: [],
-                        cafetaria: []
-                    },
-                    extra_info: '',
-                    availability: '',
+
                     images_url: []
                 },
                 // Storage
@@ -409,14 +560,14 @@
             },
             isEmpty() {
                 if (
-                    this.listingData.name.length == 0 ||
-                    this.listingData.address.length == 0 ||
-                    this.listingData.postalcode.length == 0 ||
-                    this.listingData.email.length == 0 ||
-                    this.listingData.type.length == 0 ||
-                    this.listingData.food.food_a.length == 0 ||
-                    this.listingData.food.food_b.length == 0 ||
-                    this.listingData.stable.cleaning.length == 0 ||
+                    this.listingData.contact.name.length == 0 ||
+                    this.listingData.contact.address.length == 0 ||
+                    this.listingData.contact.postalcode.length == 0 ||
+                    this.listingData.contact.email.length == 0 ||
+                    this.listingData.practical.type.length == 0 ||
+                    this.listingData.extra_info.food.food_a.length == 0 ||
+                    this.listingData.extra_info.food.food_b.length == 0 ||
+                    this.listingData.extra_info.stable.cleaning.length == 0 ||
                     this.uploadedImages.length == 0
                 ) {
                     return true
@@ -430,21 +581,41 @@
                 }
                 return true
             },
+            toggleWeidegang() {
+                this.weidegangChecked = !this.weidegangChecked
+                this.listingData.practical.accomodationhours = 1
+            },
             setCheckedStable(event) {
                 let radioBtn = event.currentTarget.parentElement.previousElementSibling
                 radioBtn.checked = true
-                this.listingData.stable.cleaning = event.target.value
+                this.listingData.extra_info.stable.cleaning = event.target.value
             },
             setCheckedFoodA(event) {
                 let radioBtn = event.currentTarget.parentElement.previousElementSibling
                 radioBtn.checked = true
-                this.listingData.food.food_a = event.target.value
+                this.listingData.extra_info.food.food_a = event.target.value
             },
             checkNumber(event) {
                 let inputValue = event.currentTarget
                 if (inputValue.value < 1) {
                     inputValue.value = 1
                 }
+            },
+            checkHour(event) {
+                let inputValue = event.currentTarget
+                if (inputValue.value < 1 || inputValue.value > 24) {
+                    inputValue.value = 1
+                }
+            },
+            showHours(event) {
+                let hours = event.currentTarget.previousElementSibling
+                hours.classList.remove('hide');
+                hours.classList.add('show');
+            },
+            hideHours(event) {
+                let hours = event.currentTarget.parentElement.firstChild.nextElementSibling
+                hours.classList.remove('show');
+                hours.classList.add('hide');
             },
             getImageAndResize() {
                 const user = firebase.auth().currentUser
