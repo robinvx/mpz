@@ -1,7 +1,11 @@
 <template>
-<div>
-    TEST
-</div>
+    <div>
+
+    {{ listingsDetail }}
+    
+     <h1> {{ listingsDetail.contact.name }}</h1>
+
+    </div>
 </template>
 
 
@@ -9,14 +13,18 @@
     export default {
         data() {
             return {
-                listings: {}
+                listingsDetail: {
+                    contact: {
+                        name: null
+                    }
+                },
             }
         },
         created() {
-            const listingsRef = firebase.database().ref().child('listings')
+            const listingsDetailRef = firebase.database().ref('listings/' + this.$route.params.listingKey)
 
-            return listingsRef.once('value', snapshot => {
-                this.listings = snapshot.val()
+            return listingsDetailRef.once('value', snapshot => {
+                this.listingsDetail = snapshot.val()
             })
         },
     }

@@ -11,7 +11,7 @@
                 <input type="text" name="address" placeholder="Adres" v-model="listingData.contact.address">
             </div>
             <div>
-                <input type="number" name="postalcode" placeholder="Postcode" v-model.trim="listingData.contact.postalcode">
+                <autocomplete :options="options" v-on:autocomplete="setPostalcodeAndCity"></autocomplete>
             </div>
             <div>
                 <input type="email" name="email" placeholder="E-mail adres" v-model.trim="listingData.contact.email">
@@ -401,12 +401,15 @@
     import {
         mapGetters
     } from 'vuex'
+    import Autocomplete from './../components/Autocomplete'
+    import Postalcodes from './../datasets/postalcodes.json'
 
     export default {
         name: 'create',
 
         data() {
             return {
+                options: Postalcodes,
                 weidegangChecked: false,
                 errors: [],
                 listingData: {
@@ -415,6 +418,7 @@
                         name: '',
                         address: '',
                         postalcode: '',
+                        city: '',
                         email: '',
                         phone: '',
                         website: ''
@@ -563,6 +567,7 @@
                     this.listingData.contact.name.length == 0 ||
                     this.listingData.contact.address.length == 0 ||
                     this.listingData.contact.postalcode.length == 0 ||
+                    this.listingData.contact.city.length == 0 ||
                     this.listingData.contact.email.length == 0 ||
                     this.listingData.practical.type.length == 0 ||
                     this.listingData.extra_info.food.food_a.length == 0 ||
@@ -616,6 +621,10 @@
                 let hours = event.currentTarget.parentElement.firstChild.nextElementSibling
                 hours.classList.remove('show');
                 hours.classList.add('hide');
+            },
+            setPostalcodeAndCity(option) {
+                this.listingData.contact.postalcode = option.zip
+                this.listingData.contact.city = option.city
             },
             getImageAndResize() {
                 const user = firebase.auth().currentUser
@@ -730,6 +739,9 @@
                     reader.readAsDataURL(file)
                 })
             }
+        },
+        components: {
+            Autocomplete
         }
     }
 
