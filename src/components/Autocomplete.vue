@@ -26,6 +26,7 @@
 
 <script>
     export default {
+        name: 'autocomplete',
         props: {
             options: {
                 type: Array,
@@ -36,15 +37,24 @@
             value: {
                 type: [String, Number],
                 default: null
+            },
+            autofill: {
+                type: String,
+                default: null
             }
         },
         data() {
             return {
                 open: false,
                 selectIndex: 0,
-                displayText: '',
+                displayText: 'Kies je postcode',
                 search: ''
             }
+        },
+        created() {
+            if(this.autofill != null) {
+                this.displayText = this.autofill
+            }    
         },
         computed: {
             typeaheadState() {

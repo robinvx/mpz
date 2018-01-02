@@ -44,76 +44,73 @@
             <h4 style="margin: 20px 0 10px 0">Accomodatie</h4>
             <div>
                 <div>
-                    <input type="checkbox" id="accomodation_binnenpiste" class="accomodation" value="Binnenpiste" v-model="listingData.practical.accomodation">
+                    <input type="checkbox" id="accomodation_binnenpiste" class="accomodation" value="Binnenpiste" v-model="listingData.practical.accomodation.option01">
                     <label for="accomodation_binnenpiste">Binnenpiste</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="accomodation_buitenpiste" class="accomodation" value="Buitenpiste" v-model="listingData.practical.accomodation">
+                    <input type="checkbox" id="accomodation_buitenpiste" class="accomodation" value="Buitenpiste" v-model="listingData.practical.accomodation.option02">
                     <label for="accomodation_buitenpiste">Buitenpiste</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="accomodation_roundpen" class="accomodation" value="Roundpen" v-model="listingData.practical.accomodation">
+                    <input type="checkbox" id="accomodation_roundpen" class="accomodation" value="Roundpen" v-model="listingData.practical.accomodation.option03">
                     <label for="accomodation_roundpen">Roundpen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="accomodation_weidegang" value="Mogelijkheid tot weidegang" v-model="listingData.practical.accomodation" @click="toggleWeidegang">
+                    <input type="checkbox" id="accomodation_weidegang" value="Mogelijkheid tot weidegang" v-model="listingData.practical.accomodation.option04" @click="toggleWeidegang">
                     <label for="accomodation_weidegang">Mogelijkheid tot weidegang</label>   
                              
                     <div v-show="weidegangChecked">
-                        <input type="number" id="accomodation_weidegang_hours" min="1" max="24" value="1" v-on:keyup="checkHour" v-model="listingData.practical.accomodationhours">
+                        <input type="number" id="accomodation_weidegang_hours" min="1" max="24" value="1" v-on:keyup="checkHour" v-model="listingData.practical.accomodation.option04Hours">
                         <label for="accomodation_weidegang_hours">uur/dag</label>
                     </div>
                 </div>
                 <div>
-                    <input type="checkbox" id="accomodation_samenstaan" class="accomodation" value="Mogelijkheid tot samenstaan met andere paarden" v-model="listingData.practical.accomodation">
+                    <input type="checkbox" id="accomodation_samenstaan" class="accomodation" value="Mogelijkheid tot samenstaan met andere paarden" v-model="listingData.practical.accomodation.option05">
                     <label for="accomodation_samenstaan">Mogelijkheid tot samenstaan met andere paarden</label>
                 </div>
-                
-                
-
             </div>
             
             
             <h4 style="margin: 20px 0 10px 0">Aanbod</h4>
             <div>
                 <div>
-                    <input type="checkbox" id="offer_groepslessen_prive" value="Groepslessen privé" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_groepslessen_prive" value="Groepslessen privé" v-model="listingData.practical.offer.option01">
                     <label for="offer_groepslessen_prive">Groepslessen privé</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_groepslessen_manegepaarden" value="Groepslessen manègepaarden" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_groepslessen_manegepaarden" value="Groepslessen manègepaarden" v-model="listingData.practical.offer.option02">
                     <label for="offer_groepslessen_manegepaarden">Groepslessen manègepaarden</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_privelessen" value="Privélessen" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_privelessen" value="Privélessen" v-model="listingData.practical.offer.option03">
                     <label for="offer_privelessen">Privélessen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_externe_instructeur" value="Mogelijkheid tot externe instructeur" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_externe_instructeur" value="Mogelijkheid tot externe instructeur" v-model="listingData.practical.offer.option04">
                     <label for="offer_externe_instructeur">Mogelijkheid tot externe instructeur</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_begeleide_buitenritten" value="Begeleide buitenritten" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_begeleide_buitenritten" value="Begeleide buitenritten" v-model="listingData.practical.offer.option05">
                     <label for="offer_begeleide_buitenritten">Begeleide buitenritten</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_kinderkampen" value="Kinderkampen" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_kinderkampen" value="Kinderkampen" v-model="listingData.practical.offer.option06">
                     <label for="offer_kinderkampen">Kinderkampen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_erkende_opleidingen" value="Erkende opleidingen" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_erkende_opleidingen" value="Erkende opleidingen" v-model="listingData.practical.offer.option07">
                     <label for="offer_erkende_opleidingen">Erkende opleidingen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_training_paard" value="Training voor het paard" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_training_paard" value="Training voor het paard" v-model="listingData.practical.offer.option08">
                     <label for="offer_training_paard">Training voor het paard</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_clinics" value="Clinics" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_clinics" value="Clinics" v-model="listingData.practical.offer.option09">
                     <label for="offer_clinics">Clinics</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="offer_winkel" value="Winkel" v-model="listingData.practical.offer">
+                    <input type="checkbox" id="offer_winkel" value="Winkel" v-model="listingData.practical.offer.option10">
                     <label for="offer_winkel">Winkel</label>
                 </div>
             </div>
@@ -122,51 +119,51 @@
             <h4 style="margin: 20px 0 10px 0">Discipline</h4>
             <div>
                 <div>
-                    <input type="checkbox" id="discipline_recreatie" value="Recreatie" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_recreatie" value="Recreatie" v-model="listingData.practical.discipline.option01">
                     <label for="discipline_recreatie">Recreatie</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_dressuur" value="Dressuur" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_dressuur" value="Dressuur" v-model="listingData.practical.discipline.option02">
                     <label for="discipline_dressuur">Dressuur</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_natural_horsemanship" value="Natural Horsemanship" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_natural_horsemanship" value="Natural Horsemanship" v-model="listingData.practical.discipline.option03">
                     <label for="discipline_natural_horsemanship">Natural Horsemanship</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_fokkerij" value="Fokkerij" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_fokkerij" value="Fokkerij" v-model="listingData.practical.discipline.option04">
                     <label for="discipline_fokkerij">Fokkerij</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_trickriding" value="Trickriding" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_trickriding" value="Trickriding" v-model="listingData.practical.discipline.option05">
                     <label for="discipline_trickriding">Trickriding</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_eventing" value="Eventing" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_eventing" value="Eventing" v-model="listingData.practical.discipline.option06">
                     <label for="discipline_eventing">Eventing</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_springen" value="Springen" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_springen" value="Springen" v-model="listingData.practical.discipline.option07">
                     <label for="discipline_springen">Springen</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_western" value="Western" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_western" value="Western" v-model="listingData.practical.discipline.option08">
                     <label for="discipline_western">Western</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_academische_rijkunst" value="Academische rijkunst" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_academische_rijkunst" value="Academische rijkunst" v-model="listingData.practical.discipline.option09">
                     <label for="discipline_academische_rijkunst">Academische rijkunst</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_voltige" value="Voltige" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_voltige" value="Voltige" v-model="listingData.practical.discipline.option10">
                     <label for="discipline_voltige">Voltige</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_endurance" value="Endurance" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_endurance" value="Endurance" v-model="listingData.practical.discipline.option11">
                     <label for="discipline_endurance">Endurance</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="discipline_mennen" value="Mennen" v-model="listingData.practical.discipline">
+                    <input type="checkbox" id="discipline_mennen" value="Mennen" v-model="listingData.practical.discipline.option12">
                     <label for="discipline_mennen">Mennen</label>
                 </div>
             </div>
@@ -219,60 +216,60 @@
             <h5 style="margin-top: 20px;">Stalbedekking</h5>
             <div>
                 <div>
-                    <input type="checkbox" id="stable_floor_stro" value="Stro" v-model="listingData.extra_info.stable.floor">
+                    <input type="checkbox" id="stable_floor_stro" value="Stro" v-model="listingData.extra_info.stable.floor.option01">
                     <label for="stable_floor_stro">Stro</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_floor_vlas" value="Vlas" v-model="listingData.extra_info.stable.floor">
+                    <input type="checkbox" id="stable_floor_vlas" value="Vlas" v-model="listingData.extra_info.stable.floor.option02">
                     <label for="stable_floor_vlas">Vlas</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_floor_houtkrullen" value="Houtkrullen" v-model="listingData.extra_info.stable.floor">
+                    <input type="checkbox" id="stable_floor_houtkrullen" value="Houtkrullen" v-model="listingData.extra_info.stable.floor.option03">
                     <label for="stable_floor_houtkrullen">Houtkrullen</label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Verzorging</h5>
             <div>
                 <div>
-                    <input type="checkbox" id="stable_hygiene_poetsplaats" value="Poetsplaats" v-model="listingData.extra_info.stable.hygiene">
+                    <input type="checkbox" id="stable_hygiene_poetsplaats" value="Poetsplaats" v-model="listingData.extra_info.stable.hygiene.option01">
                     <label for="stable_hygiene_poetsplaats">Poetsplaats</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_hygiene_wasplaats" value="Wasplaats" v-model="listingData.extra_info.stable.hygiene">
+                    <input type="checkbox" id="stable_hygiene_wasplaats" value="Wasplaats" v-model="listingData.extra_info.stable.hygiene.option02">
                     <label for="stable_hygiene_wasplaats">Wasplaats</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_hygiene_solarium" value="Solarium" v-model="listingData.extra_info.stable.hygiene">
+                    <input type="checkbox" id="stable_hygiene_solarium" value="Solarium" v-model="listingData.extra_info.stable.hygiene.option03">
                     <label for="stable_hygiene_solarium">Solarium</label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Opberging</h5>
             <div>
                 <div>
-                    <input type="checkbox" id="stable_storage_zadelkamer" value="Zadelkamer" v-model="listingData.extra_info.stable.storage">
+                    <input type="checkbox" id="stable_storage_zadelkamer" value="Zadelkamer" v-model="listingData.extra_info.stable.storage.option01">
                     <label for="stable_storage_zadelkamer">Zadelkamer</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_storage_zadelkast" value="Zadelkast" v-model="listingData.extra_info.stable.storage">
+                    <input type="checkbox" id="stable_storage_zadelkast" value="Zadelkast" v-model="listingData.extra_info.stable.storage.option02">
                     <label for="stable_storage_zadelkast">Zadelkast</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="stable_storage_vvdklant" value="Verantwoordelijkheid van de klant" v-model="listingData.extra_info.stable.storage">
+                    <input type="checkbox" id="stable_storage_vvdklant" value="Verantwoordelijkheid van de klant" v-model="listingData.extra_info.stable.storage.option03">
                     <label for="stable_storage_vvdklant">Verantwoordelijkheid van de klant</label>
                 </div>
             </div>
             <h5 style="margin-top: 20px;">Cafetaria</h5>
             <div>
                 <div>
-                    <input type="checkbox" id="cafetaria_sanitair" value="Sanitair" v-model="listingData.extra_info.stable.cafetaria">
+                    <input type="checkbox" id="cafetaria_sanitair" value="Sanitair" v-model="listingData.extra_info.stable.cafetaria.option01">
                     <label for="cafetaria_sanitair">Sanitair</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="cafetaria_food" value="Mogelijkheid tot eten" v-model="listingData.extra_info.stable.cafetaria">
+                    <input type="checkbox" id="cafetaria_food" value="Mogelijkheid tot eten" v-model="listingData.extra_info.stable.cafetaria.option02">
                     <label for="cafetaria_food">Mogelijkheid tot eten</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="cafetaria_zelfbediening" value="Zelfbediening" v-model="listingData.extra_info.stable.cafetaria">
+                    <input type="checkbox" id="cafetaria_zelfbediening" value="Zelfbediening" v-model="listingData.extra_info.stable.cafetaria.option03">
                     <label for="cafetaria_zelfbediening">Zelfbediening</label>
                 </div>
             </div>
@@ -413,6 +410,8 @@
                 weidegangChecked: false,
                 errors: [],
                 listingData: {
+                    // User ID
+                    userId: '',
                     // Contact data
                     contact: {
                         name: '',
@@ -427,10 +426,40 @@
                     // Practical Data
                     practical: {
                         type: [],
-                        accomodation: [],
-                        accomodationhours: 1,
-                        offer: [],
-                        discipline: []
+                        accomodation: {
+                            option01: '',
+                            option02: '',
+                            option03: '',
+                            option04: '',
+                            option04Hours: '',
+                            option05: ''
+                        },
+                        offer: {
+                            option01: '',
+                            option02: '',
+                            option03: '',
+                            option04: '',
+                            option05: '',
+                            option06: '',
+                            option07: '',
+                            option08: '',
+                            option09: '',
+                            option10: ''
+                        },
+                        discipline: {
+                            option01: '',
+                            option02: '',
+                            option03: '',
+                            option04: '',
+                            option05: '',
+                            option06: '',
+                            option07: '',
+                            option08: '',
+                            option09: '',
+                            option10: '',
+                            option11: '',
+                            option12: ''
+                        }
                     },
 
                     // Extra Info
@@ -440,16 +469,35 @@
                             food_b: []
                         },
                         stable: {
-                            cleaning: [],
-                            floor: [],
-                            hygiene: [],
-                            storage: [],
-                            cafetaria: []
+                            cleaning: {
+                                option01: '',
+                                option02: ''
+                            },
+                            floor: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            },
+                            hygiene: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            },
+                            storage: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            },
+                            cafetaria: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            }
                         },
                         other: {
                             comments: '',
                             youtube: '',
-                            facebook: ''
+                            facebook: null
                         },
                         availability: {
                             mon: {
@@ -553,6 +601,7 @@
             createListing() {
                 this.errors = []
                 const user = firebase.auth().currentUser
+                this.listingData.userId = user.uid
 
                 return this.listingRef.update(this.listingData).then(() => {
                     console.log("Posting complete")
@@ -588,7 +637,7 @@
             },
             toggleWeidegang() {
                 this.weidegangChecked = !this.weidegangChecked
-                this.listingData.practical.accomodationhours = 1
+                this.listingData.practical.accomodation.option04Hours = 1
             },
             setCheckedStable(event) {
                 let radioBtn = event.currentTarget.parentElement.previousElementSibling

@@ -6,7 +6,7 @@ import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Account from '@/views/Account'
 import ForgotPassword from '@/views/ForgotPassword'
-import Create from '@/views/Create'
+import CreateListing from '@/views/CreateListing'
 import store from '@/store'
 
 Vue.use(Router)
@@ -97,7 +97,7 @@ export default new Router({
             path: '/create',
             name: 'create',
             components: {
-                default: Create
+                default: CreateListing
             },
             beforeEnter: (to, from, next) => {
                 if (firebase.auth().currentUser) {
