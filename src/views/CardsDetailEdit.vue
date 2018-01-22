@@ -374,10 +374,26 @@
                 </div>
             </div>
             
+            <div v-for="(image, index) in listingsDetail.images_url">
+                <img  :src="image" alt="" height="100"> <span v-if="!minImagesReached" v-on:click="removeOriginalImage(image, index)">X</span>    
+            </div>
+            
+            <div v-if="!maxImagesReached">
+                <div>
+                    <div v-for="(imageUrl, index) in temporaryImages">
+                        <img :src="imageUrl" height="100"> <span v-on:click="removeImage">DELETE</span>
+                    </div>
+                </div>
+                <progress id="upload-progress" value="0" max="100">0%</progress>
+                <input id="upload-choose" type="file" accept="image/x-png,image/jpeg" value="upload" v-on:change="getImageAndResize" multiple>
+            </div>
         </form>
         <br>
         <h2 @click="cancel">CANCEL</h2><br>
         <h2 @click.prevent="submitEditForm">OPSLAAN</h2>
+        <div v-if="hasErrors">
+            <p v-for="error in errors">{{ error }}</p>
+        </div>
     </div>
 </template>
 
@@ -392,12 +408,40 @@
             return {
                 options: Postalcodes,
                 weidegangChecked: false,
-                errors: []
+                maxImagesReached: false,
+                minImagesReached: false,
+                errors: [],
+
+                // Storage
+                uploadedImages: [],
+
+                // Temporary
+                temporaryImages: [],
+
+                // Current amount of images
+                currentImageAmount: null
             }
         },
         computed: {
+            hasErrors() {
+                return this.errors.length > 0
+            },
             autofillPostalCodeAndCity() {
                 return this.listingsDetail.contact.postalcode + ' - ' + this.listingsDetail.contact.city
+            }
+        },
+        watch: {
+            currentImageAmount: function() {
+                if (this.currentImageAmount <= 1) {
+                    this.minImagesReached = true
+                } else {
+                    this.minImagesReached = false
+                }
+                if (this.currentImageAmount >= 5) {
+                    this.maxImagesReached = true
+                } else {
+                    this.maxImagesReached = false
+                }
             }
         },
         mounted() {
@@ -417,13 +461,23 @@
             }
             // Check openinghours and show if OPEN
             let openinghours = this.listingsDetail.extra_info.availability
-            for (let i in openinghours) {                
-                if(openinghours[i].open === 'Open') {
-                    let el = document.getElementById('availability_' + i +'_open')
+            for (let i in openinghours) {
+                if (openinghours[i].open === 'Open') {
+                    let el = document.getElementById('availability_' + i + '_open')
                     el.previousElementSibling.classList.remove('hide')
                     el.previousElementSibling.classList.add('show')
                 }
             }
+            // Set current amount of images
+            this.currentImageAmount = this.listingsDetail.images_url.length
+
+            console.log('currentImageAmount: ' + this.currentImageAmount)
+            // Check amount of uploaded images
+            if (this.currentImageAmount >= 5) {
+                this.maxImagesReached = true
+            }
+
+            console.log(this.listingsDetail.images_url)
         },
         methods: {
             cancel() {
@@ -431,10 +485,49 @@
             },
             submitEditForm() {
                 this.errors = []
+
+                if (this.isFormValid()) {
+                    console.log("Editing...")
+                    const user = firebase.auth().currentUser
+
+                    // Map uploadedImages to array of uploadTasks (promises)
+                    const uploads = this.uploadedImages.map((uploadedImage, index) => {
+                        // Get highest number of currentImages
+                        const vm = this
+                        let imageNumbers = []
+                        
+                        this.listingsDetail.images_url.forEach((image) => {
+                            let imageName = image.substr(image.lastIndexOf(vm.$route.params.listingKey)).split('.jpg?')[0]
+                            let imageNumber = imageName.replace(vm.$route.params.listingKey, '')
+                            imageNumbers.push(imageNumber)
+                        })
+                        let highestImageNumber = Math.max(...imageNumbers)
+                        
+                        // Rename the images
+                        let newImageName = this.$route.params.listingKey + (highestImageNumber + index + 1) + '.jpg'
+
+                        // Create a storage reference and an upload task to that reference
+                        const storageRef = firebase.storage().ref('images/' + user.uid + '/' + newImageName)
+                        const uploadTask = storageRef.put(uploadedImage)
+                        console.log("image " + index + " uploaded")
+
+                        return uploadTask.then(snapshot => {
+                            this.listingsDetail.images_url.push(snapshot.downloadURL)
+                        })
+                    })
+
+                    // Wait for all uploadTasks to be done
+                    Promise.all(uploads).then(() => {
+                        this.createEdit()
+                    })
+                }
+            },
+            createEdit() {
+                this.errors = []
                 const listingsDetailRef = firebase.database().ref('listings/' + this.$route.params.listingKey)
-                
+
                 return listingsDetailRef.update(this.listingsDetail).then(() => {
-                    console.log("Posting complete")
+                    console.log("Edit complete")
                 }, error => {
                     console.log(error.message)
                     this.errors.push(error.message)
@@ -479,6 +572,176 @@
                 let hours = event.currentTarget.parentElement.firstChild.nextElementSibling
                 hours.classList.remove('show');
                 hours.classList.add('hide');
+            },
+            getImageAndResize() {
+                const user = firebase.auth().currentUser
+                this.errors = []
+
+                // Get images and push to array if amount does not exceed 5
+                let images = event.currentTarget.files
+                let sumImages = images.length + this.uploadedImages.length
+
+                if ((images.length + this.currentImageAmount) <= 5 && (sumImages + this.currentImageAmount) <= 5) {
+                    for (let i = 0; i < images.length; i++) {
+                        if (images[i].name.lastIndexOf('.') <= 0) {
+                            this.errors.push('"' + images[i].name + '" does not have a valid file extension')
+                        } else {
+                            // Get dataURL of added images and push to temporary array
+                            const fileReader = new FileReader()
+                            fileReader.addEventListener('load', () => {
+                                this.temporaryImages.push(fileReader.result)
+                            })
+                            fileReader.readAsDataURL(images[i])
+
+                            // Resize the image
+                            this.resizeImage({
+                                file: images[i],
+                                maxSize: 500
+                            }).then((resizedImage) => {
+                                resizedImage.lastModifiedDate = new Date()
+                                resizedImage.name = images[i].name
+
+                                // Push images to array
+                                this.uploadedImages.push(resizedImage)
+                            }).catch((error) => {
+                                console.log(error)
+                            })
+                        }
+                    }
+                } else {
+                    this.errors.push("You can only upload a maximum of 5 images")
+                }
+            },
+            removeImage(event) {
+                this.errors = []
+                // Get index of parent container
+                const imageContainer = event.currentTarget.parentNode
+                const thisIndex = this.indexInParent(imageContainer)
+
+                // Remove image from arrays
+                if (thisIndex > -1) {
+                    this.temporaryImages.splice(thisIndex, 1)
+                    this.uploadedImages.splice(thisIndex, 1)
+                }
+            },
+            removeOriginalImage(imageUrl, index) {
+                this.removeOriginalImageFromListing(index)
+                this.removeOriginalImageFromStorage(imageUrl, index)
+            },
+            removeOriginalImageFromStorage(imageUrl, index) {
+                // Remove everything before listingKey
+                // Remove everything after/including '?'   
+                const user = firebase.auth().currentUser
+                const storageRef = firebase.storage().ref('images')
+                let imageName = imageUrl.substr(imageUrl.lastIndexOf(this.$route.params.listingKey)).split('?')[0]
+                let deleteImageRef = storageRef.child(user.uid + '/' + imageName)
+
+                // Delete the file
+                deleteImageRef.delete().then(() => {
+                    console.log("Image removed from Storage")
+                }, error => {
+                    console.log(error.message)
+                    this.errors.push(error.message)
+                })
+            },
+            removeOriginalImageFromListing(index) {
+                // Remove image from array before updating database
+                this.listingsDetail.images_url.splice(index, 1)
+
+                const imageRef = firebase.database().ref('listings/' + this.$route.params.listingKey + '/images_url')
+                return imageRef.set(this.listingsDetail.images_url).then(() => {
+                    this.currentImageAmount--
+                        console.log("Image removed from database")
+                }, error => {
+                    console.log(error.message)
+                    this.errors.push(error.message)
+                })
+            },
+            indexInParent(node) {
+                let children = node.parentNode.childNodes
+                let num = 0
+                for (let i = 0; i < children.length; i++) {
+                    if (children[i] == node) return num
+                    if (children[i].nodeType == 1) num++
+                }
+                return -1
+            },
+            isEmpty() {
+                if (
+                    this.listingsDetail.contact.name.length == 0 ||
+                    this.listingsDetail.contact.address.length == 0 ||
+                    this.listingsDetail.contact.postalcode.length == 0 ||
+                    this.listingsDetail.contact.city.length == 0 ||
+                    this.listingsDetail.contact.email.length == 0 ||
+                    this.listingsDetail.practical.type.length == 0 ||
+                    this.listingsDetail.extra_info.food.food_a.length == 0 ||
+                    this.listingsDetail.extra_info.food.food_b.length == 0 ||
+                    this.listingsDetail.extra_info.stable.cleaning.length == 0 ||
+                    this.uploadedImages.length == 0
+                ) {
+                    return true
+                }
+                return false
+            },
+            isFormValid() {
+                if (this.isEmpty()) {
+                    this.errors.push('Please fill in all required fields')
+                    return false
+                }
+                return true
+            },
+            resizeImage(settings) {
+                var file = settings.file
+                var maxSize = settings.maxSize
+                var reader = new FileReader()
+                var image = new Image()
+                var canvas = document.createElement('canvas')
+                var dataURItoBlob = (dataURI) => {
+                    var bytes = dataURI.split(',')[0].indexOf('base64') >= 0 ?
+                        atob(dataURI.split(',')[1]) :
+                        unescape(dataURI.split(',')[1])
+                    var mime = dataURI.split(',')[0].split(':')[1].split(';')[0]
+                    var max = bytes.length
+                    var ia = new Uint8Array(max)
+                    for (var i = 0; i < max; i++)
+                        ia[i] = bytes.charCodeAt(i)
+                    return new Blob([ia], {
+                        type: mime
+                    });
+                };
+                var resize = () => {
+                    var width = image.width
+                    var height = image.height
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height *= maxSize / width
+                            width = maxSize
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width *= maxSize / height
+                            height = maxSize
+                        }
+                    }
+                    canvas.width = width
+                    canvas.height = height
+                    canvas.getContext('2d').drawImage(image, 0, 0, width, height)
+                    var dataUrl = canvas.toDataURL('image/jpeg')
+                    return dataURItoBlob(dataUrl)
+                };
+                return new Promise((ok, no) => {
+                    if (!file.type.match(/image.*/)) {
+                        no(new Error("Not an image"))
+                        return
+                    }
+                    reader.onload = (readerEvent) => {
+                        image.onload = () => {
+                            return ok(resize())
+                        }
+                        image.src = readerEvent.target.result
+                    }
+                    reader.readAsDataURL(file)
+                })
             }
         },
         components: {

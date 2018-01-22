@@ -87,7 +87,9 @@
 
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {
+        mapGetters
+    } from 'vuex'
     import CardsDetailEdit from './CardsDetailEdit'
 
     export default {
@@ -209,35 +211,40 @@
             const listingsDetailRef = firebase.database().ref('listings/' + this.$route.params.listingKey)
 
             return listingsDetailRef.once('value', snapshot => {
-                this.listingsDetail = snapshot.val()
-                
-                // SET Timings for ease of use in HTML
-                this.tm.monOpen = this.listingsDetail.extra_info.availability.mon.open,
-                    this.tm.monTime1 = this.listingsDetail.extra_info.availability.mon.time1,
-                    this.tm.monTime2 = this.listingsDetail.extra_info.availability.mon.time2,
-                    this.tm.tueOpen = this.listingsDetail.extra_info.availability.tue.open,
-                    this.tm.tueTime1 = this.listingsDetail.extra_info.availability.tue.time1,
-                    this.tm.tueTime2 = this.listingsDetail.extra_info.availability.tue.time2,
-                    this.tm.wedOpen = this.listingsDetail.extra_info.availability.wed.open,
-                    this.tm.wedTime1 = this.listingsDetail.extra_info.availability.wed.time1,
-                    this.tm.wedTime2 = this.listingsDetail.extra_info.availability.wed.time2,
-                    this.tm.thuOpen = this.listingsDetail.extra_info.availability.thu.open,
-                    this.tm.thuTime1 = this.listingsDetail.extra_info.availability.thu.time1,
-                    this.tm.thuTime2 = this.listingsDetail.extra_info.availability.thu.time2,
-                    this.tm.friOpen = this.listingsDetail.extra_info.availability.fri.open,
-                    this.tm.friTime1 = this.listingsDetail.extra_info.availability.fri.time1,
-                    this.tm.friTime2 = this.listingsDetail.extra_info.availability.fri.time2,
-                    this.tm.satOpen = this.listingsDetail.extra_info.availability.sat.open,
-                    this.tm.satTime1 = this.listingsDetail.extra_info.availability.sat.time1,
-                    this.tm.satTime2 = this.listingsDetail.extra_info.availability.sat.time2,
-                    this.tm.sunOpen = this.listingsDetail.extra_info.availability.sun.open,
-                    this.tm.sunTime1 = this.listingsDetail.extra_info.availability.sun.time1,
-                    this.tm.sunTime2 = this.listingsDetail.extra_info.availability.sun.time2
-                if (this.isLoggedIn) {
-                    const userId = firebase.auth().currentUser.uid
-                    if (this.listingsDetail.userId === userId) {
-                        this.isListingCreator = true
+                if (snapshot.exists()) {
+                    this.listingsDetail = snapshot.val()
+
+                    // SET Timings for ease of use in HTML
+                    this.tm.monOpen = this.listingsDetail.extra_info.availability.mon.open,
+                        this.tm.monTime1 = this.listingsDetail.extra_info.availability.mon.time1,
+                        this.tm.monTime2 = this.listingsDetail.extra_info.availability.mon.time2,
+                        this.tm.tueOpen = this.listingsDetail.extra_info.availability.tue.open,
+                        this.tm.tueTime1 = this.listingsDetail.extra_info.availability.tue.time1,
+                        this.tm.tueTime2 = this.listingsDetail.extra_info.availability.tue.time2,
+                        this.tm.wedOpen = this.listingsDetail.extra_info.availability.wed.open,
+                        this.tm.wedTime1 = this.listingsDetail.extra_info.availability.wed.time1,
+                        this.tm.wedTime2 = this.listingsDetail.extra_info.availability.wed.time2,
+                        this.tm.thuOpen = this.listingsDetail.extra_info.availability.thu.open,
+                        this.tm.thuTime1 = this.listingsDetail.extra_info.availability.thu.time1,
+                        this.tm.thuTime2 = this.listingsDetail.extra_info.availability.thu.time2,
+                        this.tm.friOpen = this.listingsDetail.extra_info.availability.fri.open,
+                        this.tm.friTime1 = this.listingsDetail.extra_info.availability.fri.time1,
+                        this.tm.friTime2 = this.listingsDetail.extra_info.availability.fri.time2,
+                        this.tm.satOpen = this.listingsDetail.extra_info.availability.sat.open,
+                        this.tm.satTime1 = this.listingsDetail.extra_info.availability.sat.time1,
+                        this.tm.satTime2 = this.listingsDetail.extra_info.availability.sat.time2,
+                        this.tm.sunOpen = this.listingsDetail.extra_info.availability.sun.open,
+                        this.tm.sunTime1 = this.listingsDetail.extra_info.availability.sun.time1,
+                        this.tm.sunTime2 = this.listingsDetail.extra_info.availability.sun.time2
+                    if (this.isLoggedIn) {
+                        const userId = firebase.auth().currentUser.uid
+                        if (this.listingsDetail.userId === userId) {
+                            this.isListingCreator = true
+                        }
                     }
+                } else {
+                    this.$router.push('/')
+                    console.log('this listing does not exist')
                 }
             })
         },
