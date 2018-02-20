@@ -16,12 +16,40 @@
             <h3 style="margin-top: 20px">STAP 2 - PRAKTISCH</h3>
             <h4 style="margin: 20px 0 10px 0">Type</h4>
             <p>{{ listingsDetail.practical.type }}</p>
+            <h4 style="margin: 20px 0 10px 0">Volzet?</h4>
+            <p>{{ listingsDetail.practical.booked }}</p>
             <h4 style="margin: 20px 0 10px 0">Accomodatie</h4>
-            <p v-for="accomodation in listingsDetail.practical.accomodation">{{ accomodation }}</p>
+            <p v-if="listingsDetail.practical.accomodation.option01">Binnenpiste</p>
+            <p v-if="listingsDetail.practical.accomodation.option02">Buitenpiste</p>
+            <p v-if="listingsDetail.practical.accomodation.option03">Roundpen</p>
+            <p v-if="listingsDetail.practical.accomodation.option04">Mogelijkheid tot weidegang</p>
+            <p v-if="listingsDetail.practical.accomodation.option04Hours">{{ listingsDetail.practical.accomodation.option04Hours }}</p>
+            <p v-if="listingsDetail.practical.accomodation.option05">Mogelijkheid tot samenstaan met andere paarden</p>
             <h4 style="margin: 20px 0 10px 0">Aanbod</h4>
-            <p v-for="offer in listingsDetail.practical.offer">{{ offer }}</p>
+            <p v-if="listingsDetail.practical.offer.option01">Groepslessen privé</p>
+            <p v-if="listingsDetail.practical.offer.option02">Groepslessen manègepaarden</p>
+            <p v-if="listingsDetail.practical.offer.option03">Privélessen</p>
+            <p v-if="listingsDetail.practical.offer.option04">Mogelijkheid tot externe instructeur</p>
+            <p v-if="listingsDetail.practical.offer.option05">Begeleide buitenritten</p>
+            <p v-if="listingsDetail.practical.offer.option06">Kinderkampen</p>
+            <p v-if="listingsDetail.practical.offer.option07">Erkende opleidingen</p>
+            <p v-if="listingsDetail.practical.offer.option08">Training voor het paard</p>
+            <p v-if="listingsDetail.practical.offer.option09">Clinics</p>
+            <p v-if="listingsDetail.practical.offer.option10">Winkel</p>
+            
             <h4 style="margin: 20px 0 10px 0">Discipline</h4>
-            <p v-for="discipline in listingsDetail.practical.discipline">{{ discipline }}</p>  
+            <p v-if="listingsDetail.practical.discipline.option01">Recreatie</p>
+            <p v-if="listingsDetail.practical.discipline.option02">Dressuur</p>
+            <p v-if="listingsDetail.practical.discipline.option03">Natural Horsemanship</p>
+            <p v-if="listingsDetail.practical.discipline.option04">Fokkerij</p>
+            <p v-if="listingsDetail.practical.discipline.option05">Trickriding</p>
+            <p v-if="listingsDetail.practical.discipline.option06">Eventing</p>
+            <p v-if="listingsDetail.practical.discipline.option07">Springen</p>
+            <p v-if="listingsDetail.practical.discipline.option08">Western</p>
+            <p v-if="listingsDetail.practical.discipline.option09">Academische rijkunst</p>
+            <p v-if="listingsDetail.practical.discipline.option10">Voltige</p>
+            <p v-if="listingsDetail.practical.discipline.option11">Endurance</p>
+            <p v-if="listingsDetail.practical.discipline.option12">Mennen</p>
             <hr />
             
             <h3 style="margin-top: 20px">STAP 3 - EXTRA INFO</h3>   
@@ -29,15 +57,23 @@
             <p v-for="food in listingsDetail.extra_info.food">{{ food }}</p>
             <h4 style="margin: 20px 0 10px 0">Stable</h4>
             <h5 style="font-weight:bold">Cafetaria</h5>
-            <p v-for="stableCafetaria in listingsDetail.extra_info.stable.cafetaria">{{ stableCafetaria }}</p>
+            <p v-if="listingsDetail.extra_info.stable.cafetaria.option01">Sanitair</p>
+            <p v-if="listingsDetail.extra_info.stable.cafetaria.option02">Mogelijkheid tot eten</p>
+            <p v-if="listingsDetail.extra_info.stable.cafetaria.option03">Zelfbediening</p>
             <h5 style="font-weight:bold">Cleaning</h5>
             <p>{{ listingsDetail.extra_info.stable.cleaning }}</p>
             <h5 style="font-weight:bold">Floor</h5>
-            <p v-for="stableFloor in listingsDetail.extra_info.stable.floor">{{ stableFloor }}</p>
+            <p v-if="listingsDetail.extra_info.stable.floor.option01">Stro</p>
+            <p v-if="listingsDetail.extra_info.stable.floor.option02">Vlas</p>
+            <p v-if="listingsDetail.extra_info.stable.floor.option03">Houtkrullen</p>
             <h5 style="font-weight:bold">Hygiene</h5>
-            <p v-for="stableHygiene in listingsDetail.extra_info.stable.hygiene">{{ stableHygiene }}</p>
+            <p v-if="listingsDetail.extra_info.stable.hygiene.option01">Poetsplaats</p>
+            <p v-if="listingsDetail.extra_info.stable.hygiene.option02">Wasplaats</p>
+            <p v-if="listingsDetail.extra_info.stable.hygiene.option03">Solarium</p>
             <h5 style="font-weight:bold">Storage</h5>
-            <p v-for="stableStorage in listingsDetail.extra_info.stable.storage">{{ stableStorage }}</p>
+            <p v-if="listingsDetail.extra_info.stable.storage.option01">Zadelkamer</p>
+            <p v-if="listingsDetail.extra_info.stable.storage.option02">Zadelkast</p>
+            <p v-if="listingsDetail.extra_info.stable.storage.option03">Verantwoordelijkheid van de klant</p>
             <h4 style="margin: 20px 0 10px 0">Other</h4>
             <p v-for="other in listingsDetail.extra_info.other">{{ other }}</p>
             <h4 style="margin: 20px 0 10px 0">Availability</h4>
@@ -137,10 +173,41 @@
                     // Practical Data
                     practical: {
                         type: null,
-                        accomodation: null,
-                        accomodationhours: null,
-                        offer: null,
-                        discipline: null
+                        booked: null,
+                        accomodation: {
+                            option01: '',
+                            option02: '',
+                            option03: '',
+                            option04: '',
+                            option04Hours: '',
+                            option05: ''
+                        },
+                        offer: {
+                            option01: '',
+                            option02: '',
+                            option03: '',
+                            option04: '',
+                            option05: '',
+                            option06: '',
+                            option07: '',
+                            option08: '',
+                            option09: '',
+                            option10: ''
+                        },
+                        discipline: {
+                            option01: '',
+                            option02: '',
+                            option03: '',
+                            option04: '',
+                            option05: '',
+                            option06: '',
+                            option07: '',
+                            option08: '',
+                            option09: '',
+                            option10: '',
+                            option11: '',
+                            option12: ''
+                        }
                     },
 
                     // Extra Info
@@ -150,11 +217,30 @@
                             food_b: null
                         },
                         stable: {
-                            cleaning: null,
-                            floor: null,
-                            hygiene: null,
-                            storage: null,
-                            cafetaria: null
+                            cleaning: {
+                                option01: '',
+                                option02: ''
+                            },
+                            floor: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            },
+                            hygiene: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            },
+                            storage: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            },
+                            cafetaria: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            }
                         },
                         other: {
                             comments: null,

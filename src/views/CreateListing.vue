@@ -40,6 +40,18 @@
                 </div>
             </div>
             
+            <h4 style="margin: 20px 0 10px 0">Beschikbaarheid</h4>
+            <h5 style="margin-top: 20px">Volzet?</h5>
+            <div>
+                <div>
+                    <input type="radio" id="booked_yes" value="Ja" v-model="listingData.practical.booked">
+                    <label for="booked_yes">Ja</label>
+                </div>
+                <div>
+                    <input type="radio" id="booked_no" value="Nee" v-model="listingData.practical.booked">
+                    <label for="booked_no">Neen, wij hebben nog een plaatsje vrij!</label>
+                </div>
+            </div>
             
             <h4 style="margin: 20px 0 10px 0">Accomodatie</h4>
             <div>
@@ -412,6 +424,8 @@
                 listingData: {
                     // User ID
                     userId: '',
+                    // Timestamp Unix
+                    createdOn: '',
                     // Contact data
                     contact: {
                         name: '',
@@ -426,6 +440,7 @@
                     // Practical Data
                     practical: {
                         type: [],
+                        booked: [],
                         accomodation: {
                             option01: '',
                             option02: '',
@@ -497,7 +512,7 @@
                         other: {
                             comments: '',
                             youtube: '',
-                            facebook: null
+                            facebook: ''
                         },
                         availability: {
                             mon: {
@@ -602,6 +617,7 @@
                 this.errors = []
                 const user = firebase.auth().currentUser
                 this.listingData.userId = user.uid
+                this.listingData.createdOn = Date.now()
 
                 return this.listingRef.update(this.listingData).then(() => {
                     console.log("Posting complete")
@@ -619,6 +635,7 @@
                     this.listingData.contact.city.length == 0 ||
                     this.listingData.contact.email.length == 0 ||
                     this.listingData.practical.type.length == 0 ||
+                    this.listingData.practical.booked.length == 0 ||
                     this.listingData.extra_info.food.food_a.length == 0 ||
                     this.listingData.extra_info.food.food_b.length == 0 ||
                     this.listingData.extra_info.stable.cleaning.length == 0 ||

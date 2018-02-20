@@ -39,6 +39,19 @@
                 </div>
             </div>
             
+            <h4 style="margin: 20px 0 10px 0">Beschikbaarheid</h4>
+            <h5 style="margin-top: 20px">Volzet?</h5>
+            <div>
+                <div>
+                    <input type="radio" id="booked_yes" value="Ja" v-model="listingsDetail.practical.booked">
+                    <label for="booked_yes">Ja</label>
+                </div>
+                <div>
+                    <input type="radio" id="booked_no" value="Nee" v-model="listingsDetail.practical.booked">
+                    <label for="booked_no">Neen, wij hebben nog een plaatsje vrij!</label>
+                </div>
+            </div>
+            
             <h4 style="margin: 20px 0 10px 0">Accomodatie</h4>
             <div>
                 <div>
@@ -385,7 +398,14 @@
                     </div>
                 </div>
                 <progress id="upload-progress" value="0" max="100">0%</progress>
-                <input id="upload-choose" type="file" accept="image/x-png,image/jpeg" value="upload" v-on:change="getImageAndResize" multiple>
+                <input 
+                    id="upload-choose" 
+                    type="file" 
+                    accept="image/x-png,image/jpeg" 
+                    value="upload" 
+                    v-on:change="getImageAndResize" 
+                    v-if="!maxTemporaryImagesReached"
+                    multiple>
             </div>
         </form>
         <br>
@@ -417,6 +437,8 @@
 
                 // Temporary
                 temporaryImages: [],
+                temporaryImagesAmount: null,
+                maxTemporaryImagesReached: false,
 
                 // Current amount of images
                 currentImageAmount: null
@@ -441,6 +463,13 @@
                     this.maxImagesReached = true
                 } else {
                     this.maxImagesReached = false
+                }
+            },
+            temporaryImagesAmount: function() {
+                if ((this.currentImageAmount + this.temporaryImagesAmount) >= 5) {
+                    this.maxTemporaryImagesReached = true
+                } else {
+                    this.maxTemporaryImagesReached = false
                 }
             }
         },
@@ -495,14 +524,14 @@
                         // Get highest number of currentImages
                         const vm = this
                         let imageNumbers = []
-                        
+
                         this.listingsDetail.images_url.forEach((image) => {
                             let imageName = image.substr(image.lastIndexOf(vm.$route.params.listingKey)).split('.jpg?')[0]
                             let imageNumber = imageName.replace(vm.$route.params.listingKey, '')
                             imageNumbers.push(imageNumber)
                         })
                         let highestImageNumber = Math.max(...imageNumbers)
-                        
+
                         // Rename the images
                         let newImageName = this.$route.params.listingKey + (highestImageNumber + index + 1) + '.jpg'
 
@@ -528,6 +557,7 @@
 
                 return listingsDetailRef.update(this.listingsDetail).then(() => {
                     console.log("Edit complete")
+                    this.$emit('cancelEdit')
                 }, error => {
                     console.log(error.message)
                     this.errors.push(error.message)
@@ -603,6 +633,9 @@
 
                                 // Push images to array
                                 this.uploadedImages.push(resizedImage)
+
+                                // Increase temporaryImagesAmount
+                                this.temporaryImagesAmount++
                             }).catch((error) => {
                                 console.log(error)
                             })
@@ -622,6 +655,7 @@
                 if (thisIndex > -1) {
                     this.temporaryImages.splice(thisIndex, 1)
                     this.uploadedImages.splice(thisIndex, 1)
+                    this.temporaryImagesAmount--
                 }
             },
             removeOriginalImage(imageUrl, index) {
@@ -674,10 +708,10 @@
                     this.listingsDetail.contact.city.length == 0 ||
                     this.listingsDetail.contact.email.length == 0 ||
                     this.listingsDetail.practical.type.length == 0 ||
+                    this.listingsDetail.practical.booked.length == 0 ||
                     this.listingsDetail.extra_info.food.food_a.length == 0 ||
                     this.listingsDetail.extra_info.food.food_b.length == 0 ||
-                    this.listingsDetail.extra_info.stable.cleaning.length == 0 ||
-                    this.uploadedImages.length == 0
+                    this.listingsDetail.extra_info.stable.cleaning.length == 0
                 ) {
                     return true
                 }
