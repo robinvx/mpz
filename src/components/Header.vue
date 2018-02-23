@@ -1,5 +1,6 @@
 <template>
-    <header class="header" v-bind:style="{ height: windowInnerHeight }">
+<!--    <header class="header" v-bind:style="{ height: windowInnerHeight }">-->
+    <header class="header">
         <div class="header__menu">
             <div class="header__menu__top">
                 <div class="header__menu__top__item">
@@ -18,14 +19,20 @@
                     <span class="header__menu__nav__item__icon icon icon--user icon--small"></span>
                     <span class="header__menu__nav__item__txt">Mijn profiel</span>
                 </router-link>
+<!--
                 <a href="#" class="header__menu__nav__item">
                     <span class="header__menu__nav__item__icon icon icon--video icon--small"></span>
                     <span class="header__menu__nav__item__txt">Hoe werkt het?</span>
                 </a>
+-->
                 <a href="#" class="header__menu__nav__item">
                     <span class="header__menu__nav__item__icon icon icon--contact icon--small"></span>
                     <span class="header__menu__nav__item__txt">Contact</span>
                 </a>
+                <router-link to="/create" v-on:click.native="isActiveToggle" class="header__menu__nav__item">
+                    <span class="header__menu__nav__item__icon icon icon--place icon--small"></span>
+                    <span class="header__menu__nav__item__txt">Plaats een zoekertje!</span>
+                </router-link>
                 <a href="#" class="header__menu__nav__item" v-on:click="logoutUser() + isActiveToggle()" v-if="isLoggedIn">
                     <span class="header__menu__nav__item__txt" >Log uit</span>
                 </a>
@@ -38,10 +45,12 @@
             <h1 class="header__brand__title">MIJNPAARD/ZOEKT</h1>    
             <h2 class="header__brand__subtitle">De beste thuis dat Vlaanderen te bieden heeft</h2>
         </div>
+<!--
         <div class="header__actions">
             <template-button message="Plaats een stalling" icon="place" v-on:click.native="goToCreate"></template-button>
             <template-button message="Zoek een stalling" icon="search" type="light"></template-button>
         </div>
+-->
         <div class="header__gradient"></div>
     </header>
 </template>

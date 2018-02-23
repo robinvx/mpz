@@ -17,10 +17,8 @@ $shadow-card: 0 2px 2px 0 rgba(0,0,0,0.14),
               0 3px 1px -2px rgba(0,0,0,0.2); 
 
 // SPACINGS
-$padding-base: rem(30);
+$padding-base: rem(20);
 $padding-base-half: calc(#{$padding-base} / 2);
 $padding-base-double: calc(#{$padding-base} * 2);
 
 // ANIMATIONS
-$animation-speed-card: 0.22s;
-$animation-delay-card: 0.02s;

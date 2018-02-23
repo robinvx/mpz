@@ -2,13 +2,14 @@ $header-mobile-menu-top-height: rem(50);
 
 .header {
     width: 100%;
+    height: rem(300);
     padding-top: $header-mobile-menu-top-height;
     
     position: relative;
     
     background-image: url('./assets/img/header.jpg');
     background-repeat: no-repeat;
-    background-position: 50% 50%;
+    background-position: 100% 50%;
     background-size: cover;
   
     &__menu {
