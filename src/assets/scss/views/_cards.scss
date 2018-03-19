@@ -16,7 +16,7 @@
     line-height: 0;
     border-bottom: 1px solid lighten($color-mineshaft, 80%);
     text-decoration: none;
-    
+
     &__figure {
         &__image {
             width: 100%;
@@ -30,7 +30,7 @@
                 background-color: #fff;
                 
                 &__location {
-                    line-height: 1rem;
+                    line-height: 1.25rem;
                     font-size: rem(14);
                     color: $color-mineshaft;
                 }
@@ -39,7 +39,7 @@
                     align-items: center;
                     
                     &__icon {
-                        @include size(rem(20));
+                        @include size(rem(12));
                     }
                     &__label {
                         margin-left: rem(3);

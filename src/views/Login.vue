@@ -13,10 +13,10 @@
                 <input type="submit" value="Aanmelden" v-on:click.prevent="loginUser({e: email, p: password})">  
             </div>
             <div>
-                <p>Not yet registered? <router-link to="/register">Click here to register</router-link></p>
+                <p>Not yet registered? <router-link to="/register" class="text-link">Click here to register</router-link></p>
             </div>
             <div>
-                <router-link to="/forgot-password">Wachtwoord vergeten?</router-link>
+                <router-link to="/forgot-password" class="text-link">Wachtwoord vergeten?</router-link>
             </div>
             <div v-if="hasErrors">
                 <p v-for="error in errors">{{ error }}</p>

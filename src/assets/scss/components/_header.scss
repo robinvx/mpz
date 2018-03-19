@@ -9,9 +9,9 @@ $header-mobile-menu-top-height: rem(50);
     
     background-image: url('./assets/img/header.jpg');
     background-repeat: no-repeat;
-    background-position: 100% 50%;
+    background-position: 100% $header-mobile-menu-top-height;
     background-size: cover;
-  
+    
     &__menu {
         
         // Mobile top bar
@@ -33,13 +33,19 @@ $header-mobile-menu-top-height: rem(50);
 
             &__item {
                 display: flex;
-                flex: 1 1 100%;
-                //width: 100%;
 
+                &:nth-child(1) {
+                    flex: 1 1 100%;
+                }
+                &:nth-child(2) {
+                    justify-content: flex-end;
+                    line-height: 0;
+                }
                 &:last-child { 
                     justify-content: flex-end;
+                    margin-left: $padding-base;
                 }
-
+                
                 &__toggle {
                     padding: rem(5) rem(10);
                     
@@ -86,9 +92,14 @@ $header-mobile-menu-top-height: rem(50);
                 text-transform: uppercase;
                 text-decoration: none;
                 color: $color-mineshaft;
+                transition: none;
 
                 border-bottom: 1px solid rgba($color-mineshaft, 0.05);
 
+                &:hover {
+                    color: $color-mineshaft;
+                }
+                
                 &__icon {
                     margin-right: rem(24);
                 }

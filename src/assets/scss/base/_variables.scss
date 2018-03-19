@@ -1,12 +1,10 @@
 // COLORS
 $color-mineshaft: #212121;
 $color-alabaster: #fafafa;
+$color-surfcrest: #cae4c7;
 
-$color-claret: #801735;
-$color-nevada: #5e6a70;
-
-$color-succes: #26a69a;
-$color-error: #f44336;
+$color-success: #5cb85c;
+$color-error: #d9534f;
 
 // SHADOWS
 $shadow-light: 0 1px 10px rgba(0,0,0, 0.06);
@@ -21,4 +19,20 @@ $padding-base: rem(20);
 $padding-base-half: calc(#{$padding-base} / 2);
 $padding-base-double: calc(#{$padding-base} * 2);
 
-// ANIMATIONS
+// COLOR CLASSES
+$colors:
+    (1, $color-mineshaft),
+    (2, $color-alabaster),
+    (3, $color-surfcrest),
+    (4, $color-success),
+    (5, $color-error);
+            
+
+@each $number, $color in $colors {
+    .bg-#{$number} {
+        background-color: $color;
+    }
+    .clr-#{$number} {
+        color: $color;
+    }
+}

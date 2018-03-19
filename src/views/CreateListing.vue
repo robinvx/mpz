@@ -54,6 +54,7 @@
             </div>
             
             <h4 style="margin: 20px 0 10px 0">Accomodatie</h4>
+            <h5 style="margin-top: 20px;">Piste</h5>
             <div>
                 <div>
                     <input type="checkbox" id="accomodation_binnenpiste" class="accomodation" value="Binnenpiste" v-model="listingData.practical.accomodation.option01">
@@ -67,6 +68,9 @@
                     <input type="checkbox" id="accomodation_roundpen" class="accomodation" value="Roundpen" v-model="listingData.practical.accomodation.option03">
                     <label for="accomodation_roundpen">Roundpen</label>
                 </div>
+            </div>
+            <h5 style="margin-top: 20px;">Weidegang</h5>
+            <div>
                 <div>
                     <input type="checkbox" id="accomodation_weidegang" value="Mogelijkheid tot weidegang" v-model="listingData.practical.accomodation.option04" @click="toggleWeidegang">
                     <label for="accomodation_weidegang">Mogelijkheid tot weidegang</label>   
@@ -81,7 +85,51 @@
                     <label for="accomodation_samenstaan">Mogelijkheid tot samenstaan met andere paarden</label>
                 </div>
             </div>
-            
+            <h5 style="margin-top: 20px;">Opberging</h5>
+            <div>
+                <div>
+                    <input type="checkbox" id="accomodation_stable_storage_zadelkamer" value="Zadelkamer" v-model="listingData.practical.accomodation.storage.option01">
+                    <label for="accomodation_stable_storage_zadelkamer">Zadelkamer</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="accomodation_stable_storage_zadelkast" value="Zadelkast" v-model="listingData.practical.accomodation.storage.option02">
+                    <label for="accomodation_stable_storage_zadelkast">Zadelkast</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="accomodation_stable_storage_vvdklant" value="Verantwoordelijkheid van de klant" v-model="listingData.practical.accomodation.storage.option03">
+                    <label for="accomodation_stable_storage_vvdklant">Verantwoordelijkheid van de klant</label>
+                </div>
+            </div>
+            <h5 style="margin-top: 20px;">Verzorging</h5>
+            <div>
+                <div>
+                    <input type="checkbox" id="accomodation_stable_hygiene_poetsplaats" value="Poetsplaats" v-model="listingData.practical.accomodation.hygiene.option01">
+                    <label for="accomodation_stable_hygiene_poetsplaats">Poetsplaats</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="accomodation_stable_hygiene_wasplaats" value="Wasplaats" v-model="listingData.practical.accomodation.hygiene.option02">
+                    <label for="accomodation_stable_hygiene_wasplaats">Wasplaats</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="accomodation_stable_hygiene_solarium" value="Solarium" v-model="listingData.practical.accomodation.hygiene.option03">
+                    <label for="accomodation_stable_hygiene_solarium">Solarium</label>
+                </div>
+            </div>
+            <h5 style="margin-top: 20px;">Cafetaria</h5>
+            <div>
+                <div>
+                    <input type="checkbox" id="accomodation_cafetaria_sanitair" value="Sanitair" v-model="listingData.practical.accomodation.cafetaria.option01">
+                    <label for="accomodation_cafetaria_sanitair">Sanitair</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="accomodation_cafetaria_food" value="Mogelijkheid tot eten" v-model="listingData.practical.accomodation.cafetaria.option02">
+                    <label for="accomodation_cafetaria_food">Mogelijkheid tot eten</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="accomodation_cafetaria_zelfbediening" value="Zelfbediening" v-model="listingData.practical.accomodation.cafetaria.option03">
+                    <label for="accomodation_cafetaria_zelfbediening">Zelfbediening</label>
+                </div>
+            </div>
             
             <h4 style="margin: 20px 0 10px 0">Aanbod</h4>
             <div>
@@ -200,7 +248,7 @@
                     <label for="food_food_a_food_a3">Verantwoordelijkheid van de klant</label>
                 </div>
             </div>
-            <h5 style="margin-top: 20px;">Krachtvoer</h5>
+            <h5 style="margin-top: 20px;">Krachtvoeder</h5>
             <div>
                 <div>
                     <input type="radio" id="food_food_b_food_b1" value="Keuze van de klant" v-model="listingData.extra_info.food.food_b">
@@ -240,51 +288,8 @@
                     <label for="stable_floor_houtkrullen">Houtkrullen</label>
                 </div>
             </div>
-            <h5 style="margin-top: 20px;">Verzorging</h5>
-            <div>
-                <div>
-                    <input type="checkbox" id="stable_hygiene_poetsplaats" value="Poetsplaats" v-model="listingData.extra_info.stable.hygiene.option01">
-                    <label for="stable_hygiene_poetsplaats">Poetsplaats</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="stable_hygiene_wasplaats" value="Wasplaats" v-model="listingData.extra_info.stable.hygiene.option02">
-                    <label for="stable_hygiene_wasplaats">Wasplaats</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="stable_hygiene_solarium" value="Solarium" v-model="listingData.extra_info.stable.hygiene.option03">
-                    <label for="stable_hygiene_solarium">Solarium</label>
-                </div>
-            </div>
-            <h5 style="margin-top: 20px;">Opberging</h5>
-            <div>
-                <div>
-                    <input type="checkbox" id="stable_storage_zadelkamer" value="Zadelkamer" v-model="listingData.extra_info.stable.storage.option01">
-                    <label for="stable_storage_zadelkamer">Zadelkamer</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="stable_storage_zadelkast" value="Zadelkast" v-model="listingData.extra_info.stable.storage.option02">
-                    <label for="stable_storage_zadelkast">Zadelkast</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="stable_storage_vvdklant" value="Verantwoordelijkheid van de klant" v-model="listingData.extra_info.stable.storage.option03">
-                    <label for="stable_storage_vvdklant">Verantwoordelijkheid van de klant</label>
-                </div>
-            </div>
-            <h5 style="margin-top: 20px;">Cafetaria</h5>
-            <div>
-                <div>
-                    <input type="checkbox" id="cafetaria_sanitair" value="Sanitair" v-model="listingData.extra_info.stable.cafetaria.option01">
-                    <label for="cafetaria_sanitair">Sanitair</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="cafetaria_food" value="Mogelijkheid tot eten" v-model="listingData.extra_info.stable.cafetaria.option02">
-                    <label for="cafetaria_food">Mogelijkheid tot eten</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="cafetaria_zelfbediening" value="Zelfbediening" v-model="listingData.extra_info.stable.cafetaria.option03">
-                    <label for="cafetaria_zelfbediening">Zelfbediening</label>
-                </div>
-            </div>
+            
+            
             <h5 style="margin-top: 20px;">Extra info</h5>
             <div>
                 <textarea id="extra_info_comments" rows="4" v-model="listingData.extra_info.other.comments"></textarea>
@@ -296,7 +301,7 @@
                 <input type="text" name="extra_info_youtube" placeholder="Youtube" v-model="listingData.extra_info.other.youtube">
             </div>
             
-            <h5 style="margin-top: 20px;">Openingsuren</h5>
+            <h5 style="margin-top: 20px;">Beschikbaarheid</h5>
             <div>
                 <div>
                     <p style="margin-top:10px;">Maandag:</p>
@@ -447,7 +452,23 @@
                             option03: '',
                             option04: '',
                             option04Hours: '',
-                            option05: ''
+                            option05: '',
+                            
+                            hygiene: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            },
+                            storage: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            },
+                            cafetaria: {
+                                option01: '',
+                                option02: '',
+                                option03: ''
+                            }
                         },
                         offer: {
                             option01: '',
@@ -489,21 +510,6 @@
                                 option02: ''
                             },
                             floor: {
-                                option01: '',
-                                option02: '',
-                                option03: ''
-                            },
-                            hygiene: {
-                                option01: '',
-                                option02: '',
-                                option03: ''
-                            },
-                            storage: {
-                                option01: '',
-                                option02: '',
-                                option03: ''
-                            },
-                            cafetaria: {
                                 option01: '',
                                 option02: '',
                                 option03: ''
@@ -715,7 +721,7 @@
                             // Resize the image
                             this.resizeImage({
                                 file: images[i],
-                                maxSize: 500
+                                maxSize: 700
                             }).then((resizedImage) => {
                                 resizedImage.lastModifiedDate = new Date()
                                 resizedImage.name = images[i].name

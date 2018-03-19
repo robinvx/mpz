@@ -18,7 +18,7 @@
 body {
     font-family: 'Source Sans Pro', Tahoma, Geneva, sans-serif;
     font-size: 16px;
-    font-weight: normal;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -41,4 +41,18 @@ h4 {
 
 p {
     line-height: 1.25rem;
+}
+
+a.text-link {
+    color: darken($color-surfcrest, 20%);
+    text-decoration: none;
+    border-bottom: 1px solid lighten($color-surfcrest, 10%);
+    
+    transition: color .12s ease-in-out,
+                border-bottom .12s ease-in-out;
+    
+    &:hover {
+        color: $color-surfcrest;
+        border-bottom: 1px solid lighten($color-surfcrest, 20%);
+    }
 }

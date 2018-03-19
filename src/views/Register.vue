@@ -24,7 +24,7 @@
         </form>
         
         <div>
-            <p>Already registered? <router-link to="/login">Click here to login</router-link></p>
+            <p>Already registered? <router-link to="/login" class="text-link">Click here to login</router-link></p>
         </div>
         <div v-if="hasErrors">
             <p v-for="error in errors">{{ error }}</p>

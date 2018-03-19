@@ -8,12 +8,21 @@
     background-size: contain;
     
     // Icon sizes
+    &--xxsmall {
+        @include size(rem(13));
+    }
+    &--xsmall {
+        @include size(rem(20));
+    }
     &--small {
         @include size(rem(28));
     }
     
     
     // Icon images
+    &--arrow { 
+        background-image: url('./assets/img/icons/icon-arrow.svg'); 
+    }
     &--close { 
         background-image: url('./assets/img/icons/icon-close.svg'); 
     }
@@ -22,6 +31,9 @@
     }
     &--contact {
         background-image: url('./assets/img/icons/icon-contact.svg');
+    }
+    &--contact-2 {
+        background-image: url('./assets/img/icons/icon-contact-2.svg');
     }
     &--video {
         background-image: url('./assets/img/icons/icon-video.svg');
@@ -35,6 +47,27 @@
     &--plus { 
         background-image: url('./assets/img/icons/icon-plus.svg');
     }
+    &--location { 
+        background-image: url('./assets/img/icons/icon-location.svg');
+    }
+    &--globe { 
+        background-image: url('./assets/img/icons/icon-globe.svg');
+    }
+    &--phone { 
+        background-image: url('./assets/img/icons/icon-phone.svg');
+    }
+    &--checklist { 
+        background-image: url('./assets/img/icons/icon-checklist.svg');
+    }
+    &--check { 
+        background-image: url('./assets/img/icons/icon-check.svg');
+    }
+    &--success { 
+        background-image: url('./assets/img/icons/icon-success.svg');
+    }
+    &--error { 
+        background-image: url('./assets/img/icons/icon-error.svg');
+    }
     &--paddock-paradise {
         background-image: url('./assets/img/icons/icon-paddock-paradise.svg');
     }
@@ -43,5 +76,11 @@
     }
     &--stalling {
         background-image: url('./assets/img/icons/icon-stalling.svg');
+    }
+    &--facebook {
+        background-image: url('./assets/img/icons/icon-facebook.svg');
+    }
+    &--youtube {
+        background-image: url('./assets/img/icons/icon-youtube.svg');
     }
 }

@@ -1,0 +1,32 @@
+.list {
+    &-title {
+        display: flex;
+        align-items: center;
+        padding: $padding-base-half;
+        cursor: pointer;
+
+        &__icon {
+            margin-right: $padding-base-half;
+        }
+        & h4 {
+            font-size: rem(14);
+            font-weight: 700;
+            text-transform: uppercase;
+            color: darken($color-surfcrest, 10%);
+        }
+    }
+    &-subtitle {
+        &:not(:first-of-type) {
+            padding-top: $padding-base-half;
+        }
+        font-size: rem(14);
+        font-weight: 300;
+        color: darken($color-surfcrest, 10%);
+    }
+}
+
+ul {
+    & li {
+        padding: rem(5) 0;
+    }
+}

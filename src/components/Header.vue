@@ -4,13 +4,24 @@
         <div class="header__menu">
             <div class="header__menu__top">
                 <div class="header__menu__top__item">
-                    <router-link to="/" v-on:click.native="isActive = false" class="logo logo--mobile"></router-link>
+                    <h1>
+                        <router-link to="/" v-on:click.native="isActive = false" class="logo logo--mobile">MIJNPAARD/ZOEKT</router-link>
+                    </h1>
+                </div>
+                <div class="header__menu__top__item">
+                    <router-link to="/create" v-on:click.native="isActive = false">
+                        <span class="icon icon--place icon--xsmall"></span>
+                    </router-link>    
                 </div>
                 <div class="header__menu__top__item">
                     <button class="header__menu__top__item__toggle" v-on:click="isActiveToggle">Menu</button>
                 </div>
             </div>
             <nav class="header__menu__nav" v-bind:class="{ active: isActive }">
+                <router-link to="/create" v-on:click.native="isActiveToggle" class="header__menu__nav__item bg-3">
+                    <span class="header__menu__nav__item__icon icon icon--place icon--small"></span>
+                    <span class="header__menu__nav__item__txt">Plaats een zoekertje</span>
+                </router-link>
                 <router-link to="/login" v-on:click.native="isActiveToggle" v-if="!isLoggedIn" class="header__menu__nav__item">
                     <span class="header__menu__nav__item__icon icon icon--user icon--small"></span>
                     <span class="header__menu__nav__item__txt">Log in/Registreren</span>
@@ -29,10 +40,6 @@
                     <span class="header__menu__nav__item__icon icon icon--contact icon--small"></span>
                     <span class="header__menu__nav__item__txt">Contact</span>
                 </a>
-                <router-link to="/create" v-on:click.native="isActiveToggle" class="header__menu__nav__item">
-                    <span class="header__menu__nav__item__icon icon icon--place icon--small"></span>
-                    <span class="header__menu__nav__item__txt">Plaats een zoekertje!</span>
-                </router-link>
                 <a href="#" class="header__menu__nav__item" v-on:click="logoutUser() + isActiveToggle()" v-if="isLoggedIn">
                     <span class="header__menu__nav__item__txt" >Log uit</span>
                 </a>
@@ -40,10 +47,6 @@
             <transition name="fade">
                 <div class="header__menu__overlay" v-show="isActive" v-on:click="isActiveToggle"></div>
             </transition>
-        </div>
-        <div class="header__brand">
-            <h1 class="header__brand__title">MIJNPAARD/ZOEKT</h1>    
-            <h2 class="header__brand__subtitle">De beste thuis dat Vlaanderen te bieden heeft</h2>
         </div>
 <!--
         <div class="header__actions">
