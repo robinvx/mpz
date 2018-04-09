@@ -1,0 +1,52 @@
+.ta {
+    position: relative;
+
+    &__toggle.active .ta__text {
+        opacity: 0.2;
+    }
+    &__toggle.keydown .ta__text {
+        visibility: hidden;
+    }
+
+    &__text {
+        padding: rem(10);
+        position: absolute;
+        top: 0;
+        font-size: rem(14);
+    }
+
+    &__list {
+        max-height: rem(144);
+        margin: 0 $padding-base-half;
+
+        position: absolute;
+        top: rem(43);
+        left: 0;
+        right: 0;
+        overflow-y: scroll;
+        z-index: 1;
+
+        border: 1px solid lighten($color-mineshaft, 65%);
+        background-color: darken($color-alabaster, 2.5%);
+        box-shadow: $shadow-medium;
+    }
+
+    &__item {
+        display: block;
+        border-top: 1px solid darken($color-alabaster, 7.5%);
+    }
+
+    &__link {
+        display: block;
+        padding: 10px;
+        line-height: 1em;
+        font-size: 1em;
+        cursor: pointer;
+    }
+
+    &__active {
+        background: #41B883;
+        color: #fff;
+    }
+
+}

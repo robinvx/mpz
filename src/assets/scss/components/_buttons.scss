@@ -1,6 +1,7 @@
 .btn {
     width: 100%;
     padding: rem(25);
+    margin: $padding-base-half;
 
     font-size: rem(14);
     text-transform: uppercase;
@@ -17,10 +18,12 @@
         color: $color-mineshaft;
         background-color: #fff; 
     }
-    &--succes { 
+    &--success {
+        color: #fff;
         background-color: $color-success; 
     }
     &--error { 
+        color: #fff;
         background-color: $color-error; 
     }
     
@@ -33,5 +36,13 @@
             width: 25%;
             background-position: 0 50%;
         }
+    }
+    
+    // Form buttons
+    &--prev,
+    &--next,
+    &--cancel,
+    &--save {
+        opacity: 0.55;
     }
 }

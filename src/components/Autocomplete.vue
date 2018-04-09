@@ -1,26 +1,30 @@
 <template>
-    <div :class="typeaheadState">
-        <div class="typeahead__toggle" ref="toggle" @mousedown.prevent="toggle">
-            <input type="text" class="typeahead__search" ref="search"
+    <div class="ta">
+        <div class="ta__toggle input-field" ref="toggle" @mousedown.prevent="toggle">
+            <input type="text" class="ta__search" ref="search" name="search" autocomplete="listing-zipcode"
                 v-model="search"
                 @focus="onFocus"
                 @blur="onBlur"
+                @keydown="invisiblePlaceholder"
                 @keydown.esc="onEscape"
                 @keydown.down="onDownKey"
                 @keydown.up="onUpKey"
                 @keydown.enter="onEnterKey"
                 >
-            <span class="typeahead__text" ref="text">{{displayText}}</span>
+            <label for="search">Postcode</label>
+            <span class="ta__text" ref="text">{{displayText}}</span>
         </div>
-        <ul class="typeahead__list" ref="list" v-if="open">
-            <li class="typeahead__item" v-for="(option, index) in filteredOptions" :key="index">
-                <a class="typeahead__link" @mousedown.prevent="select(option)"
-                    :class="[selectIndex === index ? 'typeahead__active':'']"
-                    >
-                    {{ option.zip }} - {{ option.city }}
-                </a>
-            </li>
-        </ul>
+        <transition name="fade">
+            <ul class="ta__list" ref="list" v-if="open">
+                <li class="ta__item" v-for="(option, index) in filteredOptions" :key="index">
+                    <a class="ta__link" @mousedown.prevent="select(option)"
+                        :class="[selectIndex === index ? 'ta__active':'']"
+                        >
+                        {{ option.zip }} - {{ option.city }}
+                    </a>
+                </li>
+            </ul>
+        </transition>
     </div>
 </template>
 
@@ -52,13 +56,13 @@
             }
         },
         created() {
-            if(this.autofill != null) {
+            if (this.autofill != null) {
                 this.displayText = this.autofill
-            }    
+            }
         },
         computed: {
             typeaheadState() {
-                return this.open ? 'typeahead typeahead__open' : 'typeahead'
+                return this.open ? 'ta ta__open' : 'ta'
             },
             filteredOptions() {
                 const exp = new RegExp(this.search, 'i')
@@ -97,7 +101,7 @@
             },
             select(option) {
                 this.displayText = option.zip + ' - ' + option.city,
-                this.$emit('autocomplete', option)
+                    this.$emit('autocomplete', option)
                 this.$refs.search.blur()
             },
             toggle(e) {
@@ -117,98 +121,23 @@
             },
             onFocus() {
                 this.open = true
+                event.target.parentElement.classList.add('active')
+                event.target.removeAttribute('readonly')
             },
             onBlur() {
                 this.search = ''
                 this.selectIndex = 0
                 this.$refs.list.scrollTop = 0
                 this.open = false
+                event.target.parentElement.classList.remove('active', 'keydown')
             },
             onEscape() {
                 this.$refs.search.blur()
-            }
+            },
+            invisiblePlaceholder(){
+                event.target.parentElement.classList.add('keydown')    
+            } 
         }
     }
 
 </script>
-<style type="text/css">
-    .typeahead {
-        border-radius: 3px;
-        border: 1px solid #ccc;
-        position: relative;
-        z-index: 1;
-        width: 100%;
-        font-size: 14px;
-    }
-
-    .typeahead__open {
-        border: 1px solid #41B883;
-    }
-
-    .typeahead__open .typeahead__text {
-        visibility: hidden;
-    }
-
-    .typeahead__toggle {
-        position: relative;
-        z-index: 1;
-        width: 100%;
-    }
-
-    .typeahead__search {
-        position: absolute;
-        top: 0;
-        left: 0;
-        line-height: 1em;
-        font-size: 1em;
-        padding: 10px;
-        width: 100%;
-        display: block;
-        cursor: text;
-        background: transparent;
-        border: none;
-        outline: none;
-        z-index: 2;
-    }
-
-    .typeahead__text {
-        min-height: 36px;
-        font-size: 1em;
-        line-height: 1em;
-        padding: 10px;
-        display: inline-block;
-        position: relative;
-        z-index: 3;
-    }
-
-    .typeahead__list {
-        position: absolute;
-        top:40px;
-        left: 0;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        max-height: 200px;
-        overflow-y: scroll;
-        background-color: #f4f4f4;
-    }
-
-    .typeahead__item {
-        display: block;
-        border-top: 1px solid #f4f4f4;
-    }
-
-    .typeahead__link {
-        display: block;
-        padding: 10px;
-        line-height: 1em;
-        font-size: 1em;
-        cursor: pointer;
-    }
-
-    .typeahead__active {
-        background: #41B883;
-        color: #fff;
-    }
-
-</style>
