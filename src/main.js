@@ -6,12 +6,11 @@ import { sync } from 'vuex-router-sync'
 import router from './router'
 import firebase from 'firebase'
 import store from './store'
-//import VueFire from 'vuefire'
+import VeeValidate from 'vee-validate';
+
+Vue.use(VeeValidate);
 
 Vue.config.productionTip = false
-
-// Use vuefire as a plugin in this project
-//Vue.use(VueFire)
 
 // Vuex router sync
 sync(store, router)

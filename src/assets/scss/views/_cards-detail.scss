@@ -10,7 +10,31 @@
         padding-bottom: $padding-base-half;
         padding-left: calc(#{$padding-base} + 0.8125rem);
     }
-} // HEADER
+} 
+// EDIT 
+.cd-edit,
+.cd-create {
+    .cd-block {
+        &__content {
+            display: block;
+        }
+    }
+    .list-title {
+        cursor: auto;
+    }
+    &-time {
+        position: relative;
+        
+        & .show {
+            position: absolute;
+            left: rem(100);
+            top: 50%;
+            transform: translateY(-75%);
+            z-index: 1;
+        }
+    }
+}
+// HEADER
 .cd-header {
     text-align: center;
 

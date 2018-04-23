@@ -39,10 +39,11 @@
     }
     
     // Form buttons
+    &--edit,
     &--prev,
     &--next,
     &--cancel,
     &--save {
-        opacity: 0.55;
+        opacity: 0.65;
     }
 }

@@ -252,7 +252,9 @@
                 </div>
             </section>
             
-            <h2 v-if="isListingCreator" @click="toggleEditMode">EDIT</h2>
+            <div class="form-progress__buttons">
+                <button class="btn btn--edit btn--success" v-if="isListingCreator" @click="toggleEditMode">Wijzigen</button>
+            </div>
         </section>
         <cards-detail-edit v-if="editMode" @cancelEdit="toggleEditMode" :listingsDetail="listingsDetail" class="cd-edit"></cards-detail-edit>
     </div>

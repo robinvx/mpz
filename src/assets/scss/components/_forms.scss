@@ -39,7 +39,7 @@
         text-transform: uppercase;
         
         &.active {
-            color: $color-surfcrest; 
+            color: darken($color-surfcrest, 10%);
         }
     }
     &__circle {
@@ -56,11 +56,14 @@
         }
     }
     
-    &__buttons {
+    &__buttons{
         display: flex;
         
-        & button {
+        & button,
+        & a {
             flex: 1;
+            text-align: center;
+            text-decoration: none;
         }
     }
 }
@@ -120,5 +123,215 @@
             color: lighten($color-mineshaft, 50%);
             cursor: auto;
         }
+    }
+}
+// Time field
+.time-field {
+    display: inline-block;
+    position: relative;
+    
+    & input {
+        font-family: 'Source Sans Pro', Tahoma, Geneva, sans-serif;
+        font-size: rem(14);
+        color: $color-mineshaft;
+
+        border: none; 
+        border-bottom: 1px solid lighten($color-mineshaft, 65%);
+        outline: none;
+    }
+    
+    & label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateY(-100%);
+        font-size: rem(10);
+        color: $color-mineshaft;
+    }
+}
+// Radio & checkbox field
+.radio-field,
+.checkbox-field {
+    & input[type=radio],
+    & input[type=checkbox] {
+        display: inline;
+        width: 0;
+        margin: 0;
+        
+        opacity: 0;
+        overflow: hidden;
+        appearance: none;
+       
+        &:checked {
+            & + label {
+                color: lighten($color-mineshaft, 20%);
+            }
+
+            & + label:before {
+                border-color: darken($color-surfcrest, 10%);
+            }
+
+            & + label:after {
+                transform: scale(1);
+            }
+        }
+    }
+  
+    & label {
+        display: inline-block;
+        width: 100%;
+        padding: $padding-base-half rem(27);
+
+        position: relative;  
+
+        font-size: rem(14);
+        color: lighten($color-mineshaft, 50%);
+        transition: color .15s ease-in-out;
+        cursor: pointer;
+    
+        &:before, 
+        &:after {      
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            transition: transform .15s ease-in-out, 
+                        border-color .15s ease-in-out;
+        } 
+        &:before {
+            @include size(rem(20));
+            top: rem(10);
+            left: 0;
+            border: 1px solid lighten($color-mineshaft, 70%);
+        }
+        &:after {
+            @include size(rem(14));
+            top: rem(13);
+            left: rem(3);
+            transform: scale(0);
+            background-color: darken($color-surfcrest, 10%);
+        }
+
+        &:hover {
+          color: darken($color-surfcrest, 10%);
+
+          &:before {
+            border-color: darken($color-surfcrest, 10%);
+          }
+        }
+    }
+}
+
+// Checkbox field specific
+.checkbox-field {
+    & label {
+        &:before {
+            border-radius: 1px;
+        }
+        &:after {
+            border-radius: 0;
+        }
+    }
+    
+    &__child-input {
+        display: inline-flex;
+        margin-left: rem(27);
+        margin-bottom: $padding-base-half;
+        position: relative;
+        
+        &:before {
+            content: '';
+            display: block; 
+            width: 100%; 
+            height: 1px;
+
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            
+            background-color: lighten($color-mineshaft, 65%);
+        }
+        & input {
+            font-family: 'Source Sans Pro', Tahoma, Geneva, sans-serif;
+            font-size: rem(14);
+            color: $color-mineshaft;
+            border: none;
+            outline: none;
+        }
+        & label {
+            width: inherit;
+            margin-left: $padding-base-half;
+            padding: 0;
+            
+            &:before,
+            &:after {
+                display: none;
+            }
+        }
+    }
+}
+
+// Radio field specific
+.radio-field {
+    &__child-input {
+        width: rem(100);
+        padding-right: rem(65);
+        font-family: 'Source Sans Pro', Tahoma, Geneva, sans-serif;
+        font-size: rem(14);
+        color: $color-mineshaft;
+        border: none;
+        border-bottom: 1px solid lighten($color-mineshaft, 65%);
+        outline: none;   
+        
+        & + span {
+            position: absolute;
+            top: rem(10);
+            transform: translateX(-100%);
+        }
+    }
+}
+
+// Textarea
+.textarea-field {
+    position: relative;
+    
+    &:before,
+    &:after {
+        content: '';
+        display: block; 
+        
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+    }
+    &:before {
+        width: 100%; 
+        height: 1px;
+        background-color: lighten($color-mineshaft, 65%);
+    }
+    &:after {
+        width: 0;
+        height: 3px;
+        background-color: $color-surfcrest;
+        transition: width 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    }
+    
+    &.active {
+        &:after {
+            width: 100%;    
+        }
+    }
+    
+    & textarea {
+        display: block;
+        width: 95%;
+        height: rem(120);
+        margin: 0 auto;
+        
+        font-family: 'Source Sans Pro', Tahoma, Geneva, sans-serif;
+        font-size: rem(14);
+        
+        border: none;
+        outline: none;
+        resize: none;
     }
 }

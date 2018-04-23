@@ -17,7 +17,7 @@
     }
     &-subtitle {
         &:not(:first-of-type) {
-            padding-top: $padding-base-half;
+            padding-top: $padding-base;
         }
         font-size: rem(14);
         font-weight: 300;
