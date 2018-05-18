@@ -1,0 +1,22 @@
+// Loader
+.loader {
+    @include size(rem(100));
+    border: 16px solid $color-alabaster;
+    border-top: 16px solid $color-surfcrest;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+// Loader specific
+.cd-loader {
+    padding: $padding-base;
+    
+    & .loader {
+        margin: 0 auto;    
+    }
+}

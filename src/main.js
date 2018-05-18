@@ -6,8 +6,54 @@ import { sync } from 'vuex-router-sync'
 import router from './router'
 import firebase from 'firebase'
 import store from './store'
-import VeeValidate from 'vee-validate';
 
+import VeeValidate, { Validator } from 'vee-validate';
+import nl from 'vee-validate/dist/locale/nl';
+
+const dictionary = {
+    custom: {
+        name: {
+            required: 'Dit veld is verplicht in te vullen'
+        },
+        address: {
+            required: 'Dit veld is verplicht in te vullen'
+        },
+        email: {
+            required: 'Dit veld is verplicht in te vullen'
+        },
+        website: {
+            url: 'Dit is geen geldige URL'
+        },
+        phone: {
+            max: 'Dit nummer is te lang',
+            numeric: 'Dit veld mag alleen nummers bevatten'
+        },
+        radio_group_1: {
+            required: 'Dit veld is verplicht'
+        },
+        radio_group_2: {
+            required: 'Dit veld is verplicht'
+        },
+        radio_group_4: {
+            required: 'Deze velden zijn verplicht'
+        },
+        foodOptions: {
+            required: 'Deze velden zijn verplicht'
+        },
+        extra_info_facebook: {
+            url: 'Dit is geen geldige URL'
+        },
+        extra_info_youtube: {
+            url: 'Dit is geen geldige URL'
+        }
+    },
+    attributes: {
+        email: 'E-mail'
+    }
+}
+
+Validator.localize('nl', dictionary)
+Validator.localize('nl', nl)
 Vue.use(VeeValidate);
 
 Vue.config.productionTip = false

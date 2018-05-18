@@ -3,6 +3,7 @@
         display: flex;
         align-items: center;
         padding: $padding-base-half;
+        position: relative;
         cursor: pointer;
 
         &__icon {

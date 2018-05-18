@@ -17,14 +17,29 @@
     &--light { 
         color: $color-mineshaft;
         background-color: #fff; 
+        transition: background-color .2s ease-in-out;
+    
+        &:hover {
+            background-color: darken(#fff, 2.5%); 
+        } 
     }
     &--success {
         color: #fff;
         background-color: $color-success; 
+        transition: background-color .2s ease-in-out;
+    
+        &:hover {
+            background-color: darken($color-success, 7.5%); 
+        }  
     }
     &--error { 
         color: #fff;
         background-color: $color-error; 
+        transition: background-color .2s ease-in-out;
+    
+        &:hover {
+            background-color: darken($color-error, 7.5%); 
+        } 
     }
     
     // Button with icon

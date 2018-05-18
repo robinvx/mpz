@@ -490,6 +490,7 @@
             },
             toggleEditMode() {
                 this.editMode = !this.editMode
+                window.scrollTo(0, 0)
             },
             getIconType(type) {
                 if (type != null) {

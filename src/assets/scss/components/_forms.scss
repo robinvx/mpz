@@ -28,7 +28,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        cursor: pointer;
+        // cursor: pointer;
     }
     &__label {
         margin-bottom: $padding-base-half;
@@ -122,6 +122,10 @@
             font-size: rem(12);
             color: lighten($color-mineshaft, 50%);
             cursor: auto;
+        }
+        
+        &.has-error {
+            background-color: lighten($color-error, 32.5%);
         }
     }
 }
@@ -334,4 +338,53 @@
         outline: none;
         resize: none;
     }
+}
+
+// Error message
+.input-error-msg {
+    position: absolute;
+    top: rem(-5);
+    right: 0;
+    transform: translateY(-100%);
+    
+    font-size: rem(12);
+    color: $color-error;
+}
+.radio-error-msg {
+    display: none;
+    padding: $padding-base-half;
+    
+    position: absolute;
+    top: $padding-base-half;
+    right: $padding-base-half;
+    
+    font-size: rem(12);
+    color: lighten($color-error, 12.5%);
+    background-color: lighten($color-error, 32.5%);
+}
+.list-subtitle-error {
+    position: relative;
+
+    &__msg {
+        display: none;
+        padding: rem(5);
+        
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        font-size: rem(12);
+        color: lighten($color-error, 12.5%);
+        background-color: lighten($color-error, 32.5%);
+    }
+}
+.file-error-msg {
+    display: block;
+    padding: $padding-base-half;
+    margin: $padding-base-half;
+
+    text-align: center;
+    font-size: rem(12);
+    color: lighten($color-error, 12.5%);
+    background-color: lighten($color-error, 32.5%); 
 }

@@ -13,6 +13,7 @@
                 >
             <label for="search">Postcode</label>
             <span class="ta__text" ref="text">{{displayText}}</span>
+            <span class="input-error-msg">Dit veld is verplicht in te vullen.</span>
         </div>
         <transition name="fade">
             <ul class="ta__list" ref="list" v-if="open">

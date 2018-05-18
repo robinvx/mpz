@@ -2,10 +2,7 @@
     <section>
         <div class="form-progress">
             <div class="form-progress__list">
-                <div class="form-progress__item" 
-                     v-for="(value, key, index) in formProgressSteps" 
-                     @click="formProgressChangeStep(index)"
-                >
+                <div class="form-progress__item" v-for="(value, key, index) in formProgressSteps">
                     <div class="form-progress__label" :class="{ active: formProgressActive(index) }">{{ value }}</div>    
                     <div class="form-progress__circle" :class="{ active: formProgressActive(index) }"></div>    
                 </div>
@@ -14,27 +11,68 @@
         <form id="form__edit">
             <div v-show="formProgressCurrentStep === 1">
                 <div class="input-field">
-                    <input type="text" name="name" v-model="listingsDetail.contact.name" @focus="addActiveClass" @blur="removeActiveClass">
+                    <input 
+                        type="text" 
+                        name="name" 
+                        v-model="listingsDetail.contact.name" 
+                        @focus="addActiveClass" 
+                        @blur="removeActiveClass"
+                        :class="{'has-error': errors.has('name')}"
+                        v-validate="'required'">
                     <label for="name">Naam</label>
+                    <span class="input-error-msg">{{ errors.first('name') }}</span>
                 </div>
                 <div class="input-field">
-                    <input type="text" name="address" v-model="listingsDetail.contact.address" @focus="addActiveClass" @blur="removeActiveClass">
+                    <input 
+                        type="text" 
+                        name="address" 
+                        v-model="listingsDetail.contact.address" 
+                        @focus="addActiveClass" 
+                        @blur="removeActiveClass"
+                        :class="{'has-error': errors.has('address')}"
+                        v-validate="'required'">
                     <label for="address">Adres</label>
+                    <span class="input-error-msg">{{ errors.first('address') }}</span>
                 </div>
                 
-                <autocomplete :options="options" :autofill="autofillPostalCodeAndCity" v-on:autocomplete="setPostalcodeAndCity"></autocomplete>
+                <autocomplete :options="options" :autofill="autofillPostalCodeAndCity" v-on:autocomplete="setPostalcodeAndCity" :class="{'has-error': postalCodeError}"></autocomplete>
                 
-                <div class="input-field">
-                    <input type="email" name="email" v-model.trim="listingsDetail.contact.email" @focus="addActiveClass" @blur="removeActiveClass">
+                 <div class="input-field">
+                    <input 
+                        type="email" 
+                        name="email" 
+                        v-model.trim="listingsDetail.contact.email" 
+                        @focus="addActiveClass" 
+                        @blur="removeActiveClass"
+                        :class="{'has-error': errors.has('email')}"
+                        v-validate="'required|email'">
                     <label for="email">E-mail</label>
+                    <span class="input-error-msg">{{ errors.first('email') }}</span>
                 </div>
                 <div class="input-field">
-                    <input type="text" name="phone" v-model.trim="listingsDetail.contact.phone" @focus="addActiveClass" @blur="removeActiveClass">
+                    <input 
+                        type="text" 
+                        name="phone" 
+                        v-model.trim="listingsDetail.contact.phone" 
+                        @focus="addActiveClass" 
+                        @blur="removeActiveClass"
+                        :class="{'has-error': errors.has('phone')}"
+                        v-validate="'max:20|numeric'"
+                        >
                     <label for="phone">Telefoonnummer</label>
+                    <span class="input-error-msg">{{ errors.first('phone') }}</span>
                 </div>
                 <div class="input-field">
-                    <input type="text" name="website" v-model.trim="listingsDetail.contact.website" @focus="addActiveClass" @blur="removeActiveClass">
+                    <input 
+                        type="text" 
+                        name="website" 
+                        v-model.trim="listingsDetail.contact.website" 
+                        @focus="addActiveClass" 
+                        @blur="removeActiveClass"
+                        :class="{'has-error': errors.has('website')}"
+                        v-validate="'url'">
                     <label for="website">Website</label>
+                    <span class="input-error-msg">{{ errors.first('website') }}</span>
                 </div>
             </div>
             <div v-show="formProgressCurrentStep === 2">
@@ -42,18 +80,35 @@
                     <div class="list-title">
                         <div class="list-title__icon icon icon--checklist icon--xxsmall"></div>
                         <h4>Type</h4>
+                        <span class="radio-error-msg" v-if="errors.has('radio_group_1')">{{ errors.first('radio_group_1') }}</span>
                     </div>
                     <div class="cd-block__content">
                         <div class="radio-field">
-                            <input type="radio" id="type_stalling" value="Stalling" v-model="listingsDetail.practical.type">
+                            <input 
+                                type="radio" 
+                                id="type_stalling" 
+                                value="Stalling" 
+                                name="radio_group_1"
+                                v-model="listingsDetail.practical.type" 
+                                v-validate="'required'">
                             <label for="type_stalling">Stalling</label>
                         </div>
                         <div class="radio-field">
-                            <input type="radio" id="type_weide" value="Weide" v-model="listingsDetail.practical.type">
+                            <input 
+                                type="radio" 
+                                id="type_weide" 
+                                value="Weide" 
+                                name="radio_group_1"
+                                v-model="listingsDetail.practical.type">
                             <label for="type_weide">Weide</label>
                         </div>
                         <div class="radio-field">
-                            <input type="radio" id="type_paddockparadise" value="Paddock Paradise" v-model="listingsDetail.practical.type">
+                            <input 
+                                type="radio" 
+                                id="type_paddockparadise" 
+                                value="Paddock Paradise" 
+                                name="radio_group_1"
+                                v-model="listingsDetail.practical.type">
                             <label for="type_paddockparadise">Paddock Paradise</label>
                         </div>
                     </div>
@@ -63,15 +118,27 @@
                     <div class="list-title">
                         <div class="list-title__icon icon icon--checklist icon--xxsmall"></div>
                         <h4>Beschikbaarheid</h4>
+                        <span class="radio-error-msg" v-if="errors.has('radio_group_2')">{{ errors.first('radio_group_2') }}</span>
                     </div>
                     <div class="cd-block__content">
                         <h5 class="list-subtitle">Volzet?</h5>
                         <div class="radio-field">
-                            <input type="radio" id="booked_yes" value="Ja" v-model="listingsDetail.practical.booked">
+                            <input 
+                                type="radio" 
+                                id="booked_yes" 
+                                value="Ja" 
+                                name="radio_group_2"
+                                v-model="listingsDetail.practical.booked"
+                                v-validate="'required'">
                             <label for="booked_yes">Ja</label>
                         </div>
                         <div class="radio-field">
-                            <input type="radio" id="booked_no" value="Nee" v-model="listingsDetail.practical.booked">
+                            <input 
+                                type="radio" 
+                                id="booked_no" 
+                                value="Nee"
+                                name="radio_group_2"
+                                v-model="listingsDetail.practical.booked">
                             <label for="booked_no">Neen, wij hebben nog een plaatsje vrij!</label>
                         </div>
                     </div>
@@ -267,11 +334,19 @@
                     <div class="list-title">
                         <div class="list-title__icon icon icon--checklist icon--xxsmall"></div>
                         <h4>Voeder</h4>
+                        <span class="radio-error-msg" v-if="errors.has('foodOptions')">{{ errors.first('foodOptions') }}</span>
+                        <span class="radio-error-msg" v-if="errors.has('radio_group_4')">{{ errors.first('radio_group_4') }}</span>
                     </div>
                     <div class="cd-block__content">
                         <h5 class="list-subtitle">Ruwvoeder</h5>
                         <div class="radio-field">
-                            <input type="radio" id="food_food_a_food_a1" name="foodOptions" value="24/7" v-model="listingsDetail.extra_info.food.food_a">
+                            <input 
+                                type="radio" 
+                                id="food_food_a_food_a1" 
+                                name="foodOptions"
+                                v-validate="'required'"
+                                value="24/7" 
+                                v-model="listingsDetail.extra_info.food.food_a">
                             <label for="food_food_a_food_a1">24/7</label>
                         </div>
                         <div class="radio-field">
@@ -281,17 +356,33 @@
                             </label>
                         </div>
                         <div class="radio-field">
-                            <input type="radio" id="food_food_a_food_a3" name="foodOptions" value="Verantwoordelijkheid van de klant" v-model="listingsDetail.extra_info.food.food_a">
+                            <input 
+                                type="radio" 
+                                id="food_food_a_food_a3"
+                                name="foodOptions" 
+                                value="Verantwoordelijkheid van de klant" 
+                                v-model="listingsDetail.extra_info.food.food_a">
                             <label for="food_food_a_food_a3">Verantwoordelijkheid van de klant</label>
                         </div>
                         
                         <h5 class="list-subtitle">Krachtvoeder</h5>
                         <div class="radio-field">
-                            <input type="radio" id="food_food_b_food_b1" value="Keuze van de klant" v-model="listingsDetail.extra_info.food.food_b">
+                            <input 
+                                type="radio" 
+                                id="food_food_b_food_b1" 
+                                name="radio_group_4"
+                                value="Keuze van de klant" 
+                                v-validate="'required'"
+                                v-model="listingsDetail.extra_info.food.food_b">
                             <label for="food_food_b_food_b1">Keuze van de klant</label>
                         </div>
                         <div class="radio-field">
-                            <input type="radio" id="food_b2" value="Nee" v-model="listingsDetail.extra_info.food.food_b">
+                            <input 
+                                type="radio" 
+                                id="food_b2" 
+                                name="radio_group_4"
+                                value="Nee" 
+                                v-model="listingsDetail.extra_info.food.food_b">
                             <label for="food_b2">Nee</label>
                         </div>
                     </div>
@@ -301,6 +392,7 @@
                     <div class="list-title">
                         <div class="list-title__icon icon icon--checklist icon--xxsmall"></div>
                         <h4>Stalling</h4>
+                        <span class="radio-error-msg" v-if="cleaningError" style="display:block;">Dit veld is verplicht.</span>
                     </div>
                     <div class="cd-block__content">
                         <h5 class="list-subtitle">Mest de klant zelf uit?</h5>
@@ -342,12 +434,28 @@
                     </div>
                 </div>
                 <div class="input-field">
-                    <input type="text" name="extra_info_facebook" placeholder="Facebook" v-model="listingsDetail.extra_info.other.facebook" @focus="addActiveClass" @blur="removeActiveClass">
+                    <input 
+                        type="text" 
+                        name="extra_info_facebook" 
+                        v-model="listingsDetail.extra_info.other.facebook" 
+                        @focus="addActiveClass" 
+                        @blur="removeActiveClass"
+                        :class="{'has-error': errors.has('extra_info_facebook')}"
+                        v-validate="'url'">
                     <label for="extra_info_facebook">Facebook</label>
+                    <span class="input-error-msg">{{ errors.first('extra_info_facebook') }}</span>
                 </div>
                 <div class="input-field">
-                    <input type="text" name="extra_info_youtube" placeholder="Youtube" v-model="listingsDetail.extra_info.other.youtube" @focus="addActiveClass" @blur="removeActiveClass">
+                    <input 
+                        type="text" 
+                        name="extra_info_youtube" 
+                        v-model="listingsDetail.extra_info.other.youtube" 
+                        @focus="addActiveClass" 
+                        @blur="removeActiveClass"
+                        :class="{'has-error': errors.has('extra_info_youtube')}"
+                        v-validate="'url'">
                     <label for="extra_info_youtube">YouTube</label>
+                    <span class="input-error-msg">{{ errors.first('extra_info_youtube') }}</span>
                 </div>
                 
                 <div class="cd-block">
@@ -519,25 +627,33 @@
                     </div>
                 </div>
                 
-                <div v-for="(image, index) in listingsDetail.images_url">
-                    <img  :src="image" alt="" height="100"> <span v-if="!minImagesReached" v-on:click="removeOriginalImage(image, index)">X</span>    
-                </div>
-                
-                <div v-if="!maxImagesReached">
-                    <div>
-                        <div v-for="(imageUrl, index) in temporaryImages">
-                            <img :src="imageUrl" height="100"> <span v-on:click="removeImage">DELETE</span>
-                        </div>
+                <div class="cd-block">
+                    <div class="cd-image" v-for="(image, index) in listingsDetail.images_url">
+                        <img  :src="image" alt="" height="100"> 
+                        <span class="cd-image__close" v-if="!minImagesReached" v-on:click="removeOriginalImage(image, index)">Verwijderen</span>     
                     </div>
-                    <progress id="upload-progress" value="0" max="100">0%</progress>
-                    <input 
-                        id="upload-choose" 
-                        type="file" 
-                        accept="image/x-png,image/jpeg" 
-                        value="upload" 
-                        v-on:change="getImageAndResize" 
-                        v-if="!maxTemporaryImagesReached"
-                        multiple>
+                    
+                    <div v-if="!maxImagesReached">
+                        <div class="cd-image" v-for="(imageUrl, index) in temporaryImages">
+                            <img :src="imageUrl" height="100"> 
+                            <span class="cd-image__close" v-on:click="removeImage">Verwijderen</span>
+                        </div>
+                            
+                        <div v-show="imageLoading" class="cd-loader">
+                            <div class="loader"></div>
+                        </div>    
+                            
+                        <div class="cd-upload" v-if="!maxTemporaryImagesReached">
+                            <button class="cd-upload__button">Afbeelding toevoegen</button>
+                            <input 
+                                id="upload-choose" 
+                                type="file" 
+                                accept="image/x-png,image/jpeg"
+                                v-on:change="getImageAndResize" 
+                                multiple>
+                        </div>
+                        <span v-if="hasImageErrors" class="file-error-msg" v-for="error in imageErrors">{{ error }}</span>
+                    </div>
                 </div>
             </div>
         </form>
@@ -548,10 +664,7 @@
         </div>
         <div class="form-progress__buttons">
             <button class="btn btn--cancel btn--error" @click="cancel">Annuleren</button>
-            <button class="btn btn--save btn--success" @click.prevent="submitEditForm" v-if="formProgressLastStep()">Opslaan</button>
-        </div>
-        <div v-if="hasErrors">
-            <p v-for="error in errors">{{ error }}</p>
+            <button class="btn btn--save btn--success" @click.prevent="next" v-if="formProgressLastStep()">Opslaan</button>
         </div>
     </section>
 </template>
@@ -569,7 +682,8 @@
                 weidegangChecked: false,
                 maxImagesReached: false,
                 minImagesReached: false,
-                errors: [],
+                imageErrors: [],
+                imageLoading: false,
 
                 // Storage
                 uploadedImages: [],
@@ -588,12 +702,14 @@
                     2: 'Praktisch',
                     3: 'Extra info'
                 },
-                formProgressCurrentStep: 1
+                formProgressCurrentStep: 1,
+                postalCodeError: false,
+                cleaningError: false
             }
         },
         computed: {
-            hasErrors() {
-                return this.errors.length > 0
+            hasImageErrors() {
+                return this.imageErrors.length > 0
             },
             autofillPostalCodeAndCity() {
                 return this.listingsDetail.contact.postalcode + ' - ' + this.listingsDetail.contact.city
@@ -669,8 +785,10 @@
                 this.$emit('cancelEdit')
             },
             next() {
-                if (this.formProgressCurrentStep < Object.keys(this.formProgressSteps).length) {
-                    this.formProgressCurrentStep++
+                if (this.formProgressCurrentStep <= Object.keys(this.formProgressSteps).length) {
+                    if (this.formProgressCurrentStep === 1) this.confirmStepOne()
+                    if (this.formProgressCurrentStep === 2) this.confirmStepTwo()
+                    if (this.formProgressCurrentStep === 3) this.confirmStepThree()
                 }
             },
             previous() {
@@ -678,47 +796,99 @@
                     this.formProgressCurrentStep--
                 }
             },
-            submitEditForm() {
-                this.errors = []
-
-                if (this.isFormValid()) {
-                    console.log("Editing...")
-                    const user = firebase.auth().currentUser
-
-                    // Map uploadedImages to array of uploadTasks (promises)
-                    const uploads = this.uploadedImages.map((uploadedImage, index) => {
-                        // Get highest number of currentImages
-                        const vm = this
-                        let imageNumbers = []
-
-                        this.listingsDetail.images_url.forEach((image) => {
-                            let imageName = image.substr(image.lastIndexOf(vm.$route.params.listingKey)).split('.jpg?')[0]
-                            let imageNumber = imageName.replace(vm.$route.params.listingKey, '')
-                            imageNumbers.push(imageNumber)
-                        })
-                        let highestImageNumber = Math.max(...imageNumbers)
-
-                        // Rename the images
-                        let newImageName = this.$route.params.listingKey + (highestImageNumber + index + 1) + '.jpg'
-
-                        // Create a storage reference and an upload task to that reference
-                        const storageRef = firebase.storage().ref('images/' + user.uid + '/' + newImageName)
-                        const uploadTask = storageRef.put(uploadedImage)
-                        console.log("image " + index + " uploaded")
-
-                        return uploadTask.then(snapshot => {
-                            this.listingsDetail.images_url.push(snapshot.downloadURL)
-                        })
-                    })
-
-                    // Wait for all uploadTasks to be done
-                    Promise.all(uploads).then(() => {
-                        this.createEdit()
-                    })
+            confirmStepOne() {
+                this.$validator.validate().then(result => {
+                    if (
+                        this.errors.first('name') === null &&
+                        this.errors.first('address') === null &&
+                        this.errors.first('email') === null &&
+                        this.errors.first('phone') === null &&
+                        this.errors.first('website') === null &&
+                        this.listingsDetail.contact.postalcode.length != 0
+                    ) {
+                        this.formProgressCurrentStep++
+                    }
+                })
+                if (this.listingsDetail.contact.postalcode.length === 0) {
+                    this.postalCodeError = true
                 }
             },
+            confirmStepTwo() {
+                this.$validator.validate().then(result => {
+                    if (
+                        this.errors.first('radio_group_1') === null &&
+                        this.errors.first('radio_group_2') === null
+                    ) {
+                        this.formProgressCurrentStep++
+                    } else {
+                        const radioErrors = document.getElementsByClassName('radio-error-msg')
+                        for (let i = 0; i < radioErrors.length; ++i) radioErrors[i].style.display = 'block'
+                    }
+                })
+            },
+            confirmStepThree() {
+                this.imageErrors = []
+                this.$validator.validate().then(result => {
+                    if (
+                        this.errors.first('radio_group_4') === null &&
+                        this.errors.first('foodOptions') === null &&
+                        this.listingsDetail.extra_info.stable.cleaning.length &&
+                        this.errors.first('extra_info_facebook') === null &&
+                        this.errors.first('extra_info_youtube') === null &&
+                        (this.uploadedImages.length || this.listingsDetail.images_url.length)
+                    ) {
+                        this.submitEditForm()
+                    } else {
+                        if (!this.listingsDetail.extra_info.stable.cleaning.length) {
+                            this.cleaningError = true
+                        }
+                        if (!this.uploadedImages.length) {
+                            this.imageErrors.push("Minimum 1 afbeelding vereist.")
+                        }
+                        const radioErrors = document.getElementsByClassName('radio-error-msg')
+                        for (let i = 0; i < radioErrors.length; ++i) radioErrors[i].style.display = 'block'   
+                    }
+                })
+            },
+            submitEditForm() {
+                this.imageErrors = []
+
+                console.log("Editing...")
+                const user = firebase.auth().currentUser
+
+                // Map uploadedImages to array of uploadTasks (promises)
+                const uploads = this.uploadedImages.map((uploadedImage, index) => {
+                    // Get highest number of currentImages
+                    const vm = this
+                    let imageNumbers = []
+
+                    this.listingsDetail.images_url.forEach((image) => {
+                        let imageName = image.substr(image.lastIndexOf(vm.$route.params.listingKey)).split('.jpg?')[0]
+                        let imageNumber = imageName.replace(vm.$route.params.listingKey, '')
+                        imageNumbers.push(imageNumber)
+                    })
+                    let highestImageNumber = Math.max(...imageNumbers)
+
+                    // Rename the images
+                    let newImageName = this.$route.params.listingKey + (highestImageNumber + index + 1) + '.jpg'
+
+                    // Create a storage reference and an upload task to that reference
+                    const storageRef = firebase.storage().ref('images/' + user.uid + '/' + newImageName)
+                    const uploadTask = storageRef.put(uploadedImage)
+                    console.log("image " + index + " uploaded")
+
+                    return uploadTask.then(snapshot => {
+                        this.listingsDetail.images_url.push(snapshot.downloadURL)
+                    })
+                })
+
+                // Wait for all uploadTasks to be done
+                Promise.all(uploads).then(() => {
+                    this.createEdit()
+                })
+            },
             createEdit() {
-                this.errors = []
+                this.imageErrors = []
                 const listingsDetailRef = firebase.database().ref('listings/' + this.$route.params.listingKey)
 
                 return listingsDetailRef.update(this.listingsDetail).then(() => {
@@ -726,12 +896,13 @@
                     this.$emit('cancelEdit')
                 }, error => {
                     console.log(error.message)
-                    this.errors.push(error.message)
+                    
                 })
             },
             setPostalcodeAndCity(option) {
                 this.listingsDetail.contact.postalcode = option.zip
                 this.listingsDetail.contact.city = option.city
+                this.postalCodeError = false
             },
             toggleWeidegang() {
                 this.weidegangChecked = !this.weidegangChecked
@@ -758,6 +929,7 @@
                 let radioBtn = event.currentTarget.parentElement.previousElementSibling
                 radioBtn.checked = true
                 this.listingsDetail.extra_info.stable.cleaning = event.target.value
+                this.cleaningError = false
             },
             showHours(event) {
                 let hours = event.currentTarget.previousElementSibling
@@ -771,7 +943,7 @@
             },
             getImageAndResize() {
                 const user = firebase.auth().currentUser
-                this.errors = []
+                this.imageErrors = []
 
                 // Get images and push to array if amount does not exceed 5
                 let images = event.currentTarget.files
@@ -780,8 +952,9 @@
                 if ((images.length + this.currentImageAmount) <= 5 && (sumImages + this.currentImageAmount) <= 5) {
                     for (let i = 0; i < images.length; i++) {
                         if (images[i].name.lastIndexOf('.') <= 0) {
-                            this.errors.push('"' + images[i].name + '" does not have a valid file extension')
+                            this.imageErrors.push('"' + images[i].name + '" does not have a valid file extension')
                         } else {
+                            this.imageLoading = true
                             // Get dataURL of added images and push to temporary array
                             const fileReader = new FileReader()
                             fileReader.addEventListener('load', () => {
@@ -802,17 +975,18 @@
 
                                 // Increase temporaryImagesAmount
                                 this.temporaryImagesAmount++
+                                this.imageLoading = false
                             }).catch((error) => {
                                 console.log(error)
                             })
                         }
                     }
                 } else {
-                    this.errors.push("You can only upload a maximum of 5 images")
+                    this.imageErrors.push("You can only upload a maximum of 5 images")
                 }
             },
             removeImage(event) {
-                this.errors = []
+                this.imageErrors = []
                 // Get index of parent container
                 const imageContainer = event.currentTarget.parentNode
                 const thisIndex = this.indexInParent(imageContainer)
@@ -841,7 +1015,6 @@
                     console.log("Image removed from Storage")
                 }, error => {
                     console.log(error.message)
-                    this.errors.push(error.message)
                 })
             },
             removeOriginalImageFromListing(index) {
@@ -854,7 +1027,6 @@
                         console.log("Image removed from database")
                 }, error => {
                     console.log(error.message)
-                    this.errors.push(error.message)
                 })
             },
             indexInParent(node) {
@@ -865,30 +1037,6 @@
                     if (children[i].nodeType == 1) num++
                 }
                 return -1
-            },
-            isEmpty() {
-                if (
-                    this.listingsDetail.contact.name.length == 0 ||
-                    this.listingsDetail.contact.address.length == 0 ||
-                    this.listingsDetail.contact.postalcode.length == 0 ||
-                    this.listingsDetail.contact.city.length == 0 ||
-                    this.listingsDetail.contact.email.length == 0 ||
-                    this.listingsDetail.practical.type.length == 0 ||
-                    this.listingsDetail.practical.booked.length == 0 ||
-                    this.listingsDetail.extra_info.food.food_a.length == 0 ||
-                    this.listingsDetail.extra_info.food.food_b.length == 0 ||
-                    this.listingsDetail.extra_info.stable.cleaning.length == 0
-                ) {
-                    return true
-                }
-                return false
-            },
-            isFormValid() {
-                if (this.isEmpty()) {
-                    this.errors.push('Please fill in all required fields')
-                    return false
-                }
-                return true
             },
             resizeImage(settings) {
                 var file = settings.file

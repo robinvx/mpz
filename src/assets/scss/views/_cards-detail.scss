@@ -11,6 +11,7 @@
         padding-left: calc(#{$padding-base} + 0.8125rem);
     }
 } 
+
 // EDIT 
 .cd-edit,
 .cd-create {
@@ -34,6 +35,7 @@
         }
     }
 }
+
 // HEADER
 .cd-header {
     text-align: center;
@@ -59,7 +61,9 @@
             transform: translate(150%, -50%);
         }
     }
-} // CONTACT
+} 
+
+// CONTACT
 .cd-contact {
     max-width: rem(300);
     margin-left: auto;
@@ -89,7 +93,9 @@
             margin-right: $padding-base-half;
         }
     }
-} // GALLERY
+} 
+
+// GALLERY
 .cd-gallery {
     max-width: rem(300);
     margin-left: auto;
@@ -137,7 +143,9 @@
             transform: translate(17.5%, -50%);
         }
     }
-} // AVAILABILITY
+} 
+
+// AVAILABILITY
 .cd-availability {
     display: flex;
     align-items: center;
@@ -165,12 +173,103 @@
     &__time {
         background-color: $color-success;
     }
-} // SOCIAL
+} 
+
+// SOCIAL
 .cd-social {
     margin-top: $padding-base;
 
     &__item {
-        margin-right: $padding-base-half; //border-radius: rem(2);
+        margin-right: $padding-base-half; 
+        //border-radius: rem(2);
         opacity: 0.85;
+    }
+}
+
+// IMAGE
+.cd-image {
+    width: 100%;
+    max-width: rem(300);
+    padding: $padding-base-half;
+    margin-bottom: $padding-base-double;
+    position: relative;
+    
+    & img {
+        display: block;
+        width: 100%;
+        height: rem(175);
+    }
+    
+    &__close {
+        width: 100%;
+        max-width: calc(100% - #{$padding-base});
+        padding: $padding-base-half;
+        
+        position: absolute;
+        bottom: $padding-base-half;
+        left: $padding-base-half;
+        transform: translate(0, 100%);
+        
+        text-align: center;
+        font-size: rem(14);
+        text-transform: uppercase;
+        color: $color-alabaster;
+        background-color: $color-error;
+        opacity: 0.65;
+        cursor: pointer;
+        transition: background-color .2s ease-in-out;
+        
+        &:hover {
+            background-color: darken($color-error, 7.5%);
+        }
+    }
+}
+
+// UPLOAD
+.cd-upload {
+    display: block;
+    padding: $padding-base-half;
+    position: relative;
+    //overflow: hidden;
+    
+    &:hover {
+        & .cd-upload__button {
+                opacity: 0.85;
+        }
+    }
+    
+    &__button {
+        display: block;
+        height: rem(50);
+        margin: 0 auto;
+        padding-left: rem(50);
+        
+        position: relative;
+        
+        text-transform: uppercase;
+        opacity: 0.65;
+        transition: opacity .2s ease-in-out;
+        
+        &:before {
+            content: '+';
+            display: block;
+            
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translate(0,-50%);
+            
+            font-size: rem(70);
+            color: currentColor;
+        }
+    }
+
+    & input {
+        @include size(100%);
+
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
     }
 }
